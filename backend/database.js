@@ -1,6 +1,6 @@
-import mysql from "mysql";
+import { createConnection } from "mysql";
 
-const connection = mysql.createConnection({
+const connection = createConnection({
     host: "localhost",
     port: "3306",
     user: "root",
@@ -8,4 +8,4 @@ const connection = mysql.createConnection({
     database: "blogDB",
   });
   
-  module.exports = connection;
+export default connection;
