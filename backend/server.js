@@ -30,7 +30,7 @@ app.listen(port, () => {
 });
 
 app.post("/api/login", (req, res, next) => {
-    const key = "test"; // encode, decode를 위한 hash key이다.
+    const key = "DEVER"; // encode, decode를 위한 hash key이다.
   
     var userInfo = {
       email: req.body.email,
@@ -70,11 +70,11 @@ app.post("/api/login", (req, res, next) => {
       message: "token is created",
       token: token,
     });
-  });
+});
 
-  app.get("/api/payload", auth, (req, res) => {
+app.get("/api/payload", auth, (req, res) => {
     return res.status(200).json({
-      code: 200,
-      message: "토큰이 정상입니다.",
+        code: 200,
+        message: "토큰이 정상입니다.",
     });
-  });
+});
