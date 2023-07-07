@@ -2,6 +2,9 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 
+// Middleware
+import { auth } from "./authMiddleware.js";
+
 // api
 import connection from "./database.js";
 
@@ -66,5 +69,12 @@ app.post("/api/login", (req, res, next) => {
       code: 200,
       message: "token is created",
       token: token,
+    });
+  });
+
+  app.get("/api/payload", auth, (req, res) => {
+    return res.status(200).json({
+      code: 200,
+      message: "토큰이 정상입니다.",
     });
   });
