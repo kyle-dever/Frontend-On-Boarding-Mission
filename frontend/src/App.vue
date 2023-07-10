@@ -1,17 +1,27 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <img alt="Vue logo" src="./assets/logo.png">
+    <button @click="moveToHome">Home</button>
+    <button @click="moveToMyPage">Mypage</button>
+    <router-view></router-view>
+  </div>
+  <div id="teleport-area">
+
+  </div>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
+import { useRouter } from "vue-router";
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
+const router = useRouter();
+
+const moveToHome = () => {
+  router.push({ path: '/' })
 }
+const moveToMyPage = () => {
+  router.push({ path: '/mypage' })
+}
+
 </script>
 
 <style>
