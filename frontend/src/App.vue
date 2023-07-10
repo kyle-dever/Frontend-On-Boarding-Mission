@@ -3,8 +3,6 @@
     <img alt="Vue logo" src="./assets/logo.png">
     <div>
       <button @click="handleClick">{{ loginText }}</button>
-      <p>Email : {{ email }}</p>
-      <p>Password : {{ password }}</p>
       <TeleportModal v-if="modalStore.modal.modalLogin">
         <LoginModal @getUserInfo="getUserInfo"/>
       </TeleportModal>
@@ -22,12 +20,12 @@ import { useRouter } from 'vue-router';
 import TeleportModal from '@/components/modal/TeleportModal.vue';
 import LoginModal from '@/components/modal/LoginModal'
 import { useModalStore } from './stores/modal';
+import { useListStore } from './stores/token';
+import { postSignIn } from '@/api/userApi.js';
 
 const router = useRouter();
 const modalStore = useModalStore();
-
-const email = ref('');
-const password = ref('');
+const listStore = useListStore();
 
 const moveToHome = () => {
   router.push({ path: '/' })
@@ -37,8 +35,14 @@ const moveToMyPage = () => {
 }
 
 function getUserInfo(email, password) {
-    this.email.value = email;
-    this.password.value = password;
+  const accessToken = postSignIn(email, password)
+  console.log(accessToken)
+
+  listStore.addList({
+    accessToken: accessToken,
+  })
+
+  console.log(listStore.getDataAll)
 }
 
 function handleClick() {

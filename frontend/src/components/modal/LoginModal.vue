@@ -14,15 +14,16 @@
 <script setup>
 import { useModalStore } from "@/stores/modal";
 import Modal from "./TeleportModal.vue";
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
 
+const emit = defineEmits(['getUserInfo'])
 const modalStore = useModalStore();
 
 const email = ref('');
 const password = ref('');
 
 const confirm = () => {
-    this.$emit('getUserInfo', [email, password])
+    emit('getUserInfo', email.value, password.value)
     modalStore.closeModal('modalLogin');
 }
 const cancel = () => {

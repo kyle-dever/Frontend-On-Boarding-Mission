@@ -7,6 +7,8 @@ export const useListStore = defineStore("token", () => {
   function addList(param) {
     list.value.push(param);
   }
+
   const getDataAll = computed(() => list.value);
   return { list, addList, getDataAll };
+  
 });
