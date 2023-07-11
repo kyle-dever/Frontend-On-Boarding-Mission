@@ -1,11 +1,15 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
     <div>
-      <button @click="handleClick">{{ loginText }}</button>
+      <button @click="login">{{ loginText }}</button>
+      <button @click="signIn">회원가입</button>
       <TeleportModal v-if="modalStore.modal.modalLogin">
         <LoginModal @getUserInfo="getUserInfo"/>
       </TeleportModal>
+      <TeleportModal v-if="modalStore.modal.modalSignIn">
+        <SignInModal @postUserInfo="postUserInfo"/>
+      </TeleportModal>
+      
     </div>
 
     <button @click="moveToHome">Home</button>
@@ -19,9 +23,10 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import TeleportModal from '@/components/modal/TeleportModal.vue';
 import LoginModal from '@/components/modal/LoginModal'
+import SignInModal from '@/components/modal/SignInModal';
 import { useModalStore } from './stores/modal';
 import { useListStore } from './stores/token';
-import { postSignIn } from '@/api/userApi.js';
+import { postLogin, postSignIn } from '@/api/userApi.js';
 
 const router = useRouter();
 const modalStore = useModalStore();
@@ -35,18 +40,33 @@ const moveToMyPage = () => {
 }
 
 function getUserInfo(email, password) {
-  const accessToken = postSignIn(email, password)
+  const accessToken = postLogin(email, password)
   console.log(accessToken)
 
   listStore.addList({
     accessToken: accessToken,
   })
 
-  console.log(listStore.getDataAll)
+  loginText.value = "로그아웃"
 }
 
-function handleClick() {
+function postUserInfo(email, password, name, phoneNumber) {
+  const data = postSignIn(email, password, name, phoneNumber)
+
+  if(data.status == 400){
+    alert("이메일 중복")
+  }
+  else {
+    alert("회원가입 성공")
+  }
+}
+
+function login() {
   modalStore.openModal('modalLogin');
+}
+
+function signIn() {
+  modalStore.openModal('modalSignIn');
 }
 
 const loginText = ref("로그인");

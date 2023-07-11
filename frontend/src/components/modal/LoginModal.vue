@@ -1,7 +1,9 @@
 <template>
     <Modal class="background" ref="baseModal">
         <div class="content-container">
+            <b>아이디</b>
             <input type="text" v-model="email">
+            <b>비밀번호</b>
             <input type="password" v-model="password">
         </div>
         <div class="buttons-container">
@@ -19,8 +21,8 @@ import { ref, defineEmits } from "vue";
 const emit = defineEmits(['getUserInfo'])
 const modalStore = useModalStore();
 
-const email = ref('');
-const password = ref('');
+const email = ref('email');
+const password = ref('password');
 
 const confirm = () => {
     emit('getUserInfo', email.value, password.value)
@@ -32,15 +34,15 @@ const cancel = () => {
 </script>
 
 <style>
-.background {
-    margin: 0 auto;
-    width: 50%;
-    height: 50%;
-    background: #FFFFFFFF;
-}
-
 .content-container {
     margin: 0 auto;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+}
+
+.buttons-container {
+    margin: 0 auto;
+    display: flex;
 }
 </style>

@@ -23,4 +23,11 @@
     height: 100%;
     background: #00000033;
 }
+
+.modal-container {
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+}
+
 </style>
