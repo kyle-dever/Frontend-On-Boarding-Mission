@@ -1,47 +1,50 @@
-import connection from "../database/database.js"
+import Database from "../database/database.js";
 import crypto from 'crypto';
 
-export const auth = (req, res, next) => {
-  const token = req.headers.authorization;
-  
-  let tokenInfo = {};
-  const tokenQueryString = `SELECT * FROM Token WHERE access_token = ?;`
-  connection.query(tokenQueryString, token, (err, result) => {
-    tokenInfo = result[0];
-    expireCheck();
-  })
+export const auth = async (req, res, next) => {
+  const database = new Database
+  let isErrorOccured = false
 
-  const expireCheck = () => {
+  const expireCheck = (createdAt) => {
     const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    if ((currentDate - createdAt) > 10000) {
+      return 'ExpiredToken'
+    }
+    return ''
+  }
 
-    if ((currentDate - tokenInfo.create_at) > 900000) {
+  const decodeCrypto = async (token, salt) => {
+    return await new Promise ((resolve) => {
+      crypto.pbkdf2(token, salt, 100000, 64, 'sha256',(err, key) => {
+        resolve(key)
+      })
+    })
+  }
+
+  const token = req.headers.authorization;
+  const tokenQueryString = `SELECT * FROM Token WHERE access_token = ?;`
+  let tokenInfo = {}
+  database.query(tokenQueryString, token).then((result) => {
+    tokenInfo = result[0]
+    if (expireCheck(tokenInfo.created_at) == 'ExpiredToken')
+      isErrorOccured = true
       return res.status(419).json({
         code: 419,
         message: "토큰이 만료되었습니다.",
-      });
-    }
-  }
+    });
+  })
 
-  let userInfo = {}
   const userQueryString = `SELECT * FROM User WHERE user_id = ?;`
-  connection.query(userQueryString, tokenInfo.user_id, (err, result) => {
-    userInfo = result[0];
-
-    if (userInfo.pw != decodeCrypto()) {
+  let userInfo = {}
+  database.query(userQueryString, tokenInfo.user_id).then((result) => {
+    if (userInfo.pw != decodeCrypto(token, tokenInfo.salt)) {
+      isErrorOccured = true
       return res.status(401).json({
         code: 401,
         message: "유효하지 않은 토큰입니다.",
       });
     }
   })
-
-  const decodeCrypto = () => {
-    let decodedPw = '';
-    crypto.pbkdf2(token, tokenInfo.salt, 100000, 64, 'sha256', (err, key) => {
-      decodedPw = key.toString('base64')
-    });
-    return decodedPw;
-  }
-
-  return next();
+  
+  if(!isErrorOccured) next();
 };
