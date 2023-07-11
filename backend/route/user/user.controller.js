@@ -1,4 +1,5 @@
 import connection from "../../database/database.js"
+import crypto from 'crypto';
 
 export const signin = (req, res) => {
   const userInfo = [
@@ -31,45 +32,46 @@ export const signin = (req, res) => {
   }
 }
 
-export const login =  (req, res, next) => {
-  const key = "dever";
-  // 받은 요청에서 db의 데이터를 가져온다 (로그인정보)
-  let isError = false;
-
+export const login = (req, res, next) => {
   let userInfo = {}
   const params = [req.body.email, req.body.pw]
 
   connection.query(`SELECT * FROM User WHERE email = ? AND pw = ?;`, params, (err, data) => {
-    userInfo = data;
+    if(!data) {
+      return res.status(400).json({
+        code: 400,
+        message: "이메일 또는 비밀번호를 확인해주세요.",
+      });
+    }
+    else {
+      userInfo = data[0];
+      createToken();
+    }
   });
 
-  if(!userInfo) {
-    return res.status(400).json({
-      code: 400,
-      message: "이메일 또는 비밀번호를 확인해주세요.",
+  const createToken = () => {
+    let token = ""
+    let salt = ""
+    const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    crypto.randomBytes(64, (err, buf) => {
+      crypto.pbkdf2(userInfo.pw, buf.toString('base64'), 100000, 64, 'sha512', (err, key) => {
+        console.log(key.toString('base64'))
+        token = key.toString('base64')
+        salt = buf.toString('base64')
+
+        insertToken(token, salt, currentDate)
+      });
     });
   }
 
-  let token = "";
-
-  // jwt.sign(payload, secretOrPrivateKey, [options, callback])
-  token = jwt.sign(
-    {
-      type: "JWT",
-      email: userInfo.email,
-      userName: userInfo.user_name,
-    },
-    key,
-    {
-      expiresIn: "15m", // 15분후 만료
-      issuer: "토큰발급자",
-    }
-  );
-
-  // response
-  return res.status(200).json({
-    code: 200,
-    message: "token is created",
-    token: token,
-  });
+  const insertToken = (token, salt, date) => {
+    const params = [token, salt, date]
+    connection.query(`INSERT INTO Token VALUES (?, ?, ?);`, params, (err, data) => {
+      return res.status(200).json({
+        code: 200,
+        message: "token is created",
+        token: token,
+      });
+    })
+  }
 }
