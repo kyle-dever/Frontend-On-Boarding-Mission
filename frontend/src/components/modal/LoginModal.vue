@@ -17,7 +17,6 @@
 
 <script setup>
 import { useModalStore } from "@/stores/modal";
-
 import { ref, defineEmits } from "vue";
 
 const emit = defineEmits(['getUserInfo'])
