@@ -7,7 +7,6 @@
         <LoginModal @getUserInfo="getUserInfo"/>
       </TeleportModal>
     </div>
-
     <button @click="moveToHome">Home</button>
     <button @click="moveToMyPage">Mypage</button>
     <router-view></router-view>
@@ -22,6 +21,7 @@ import LoginModal from '@/components/modal/LoginModal'
 import { useModalStore } from './stores/modal';
 import { useListStore } from './stores/token';
 import { postSignIn } from '@/api/userApi.js';
+
 
 const router = useRouter();
 const modalStore = useModalStore();
