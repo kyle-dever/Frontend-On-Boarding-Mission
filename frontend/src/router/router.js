@@ -6,8 +6,16 @@ const routes = [
         component: () => import('@/pages/Home'),
     },
     {
-        path: '/mypage',
-        component: () => import('@/pages/MyPage'),
+        path: '/board/machine',
+        component: () => import('@/pages/Machine'),
+    },
+    {
+        path: '/board/data',
+        component: () => import('@/pages/DataAnalysis'),
+    },
+    {
+        path: '/board/program',
+        component: () => import('@/pages/Programming'),
     },
 ];
 
