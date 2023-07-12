@@ -1,34 +1,30 @@
 <template>
-    <Modal class="background" ref="baseModal">
-        <div class="member">
-            <!-- 1. 필드 -->
-            <div class="field">
-                <b>아이디</b>
-                <span class="placehold-text"><input type="text" v-model="email"></span>
-            </div>
-            <div class="field">
-                <b>비밀번호</b>
-                <input class="userpw" type="password" v-model="password">
-            </div>
-            <div class="field">
-                <b>이름</b>
-                <input class="name" type="text" v-model="name">
-            </div>
-            <div class="field">
-                <b>전화번호</b>
-                <input class ="number" type="text" v-model="phoneNumber">
-            </div>
-            <div class="button">
-                <input type="submit" @click="confirm" value="가입하기">
-                <input type="submit" @click="cancel" value="취소">
-            </div>
+    <div class="member">
+        <div class="field">
+            <b>아이디</b>
+            <span class="placehold-text"><input type="text" v-model="email"></span>
         </div>
-    </Modal>
+        <div class="field">
+            <b>비밀번호</b>
+            <input class="userpw" type="password" v-model="password">
+        </div>
+        <div class="field">
+            <b>이름</b>
+            <input class="name" type="text" v-model="name">
+        </div>
+        <div class="field">
+            <b>전화번호</b>
+            <input class ="number" type="text" v-model="phoneNumber">
+        </div>
+        <div class="button">
+            <input type="submit" @click="confirm" value="가입하기">
+            <input type="submit" @click="cancel" value="취소">
+        </div>
+    </div>
 </template>
 
 <script setup>
 import { useModalStore } from "@/stores/modal";
-import Modal from "./TeleportModal.vue";
 import { ref, defineEmits } from "vue";
 
 const emit = defineEmits(['postUserInfo'])
@@ -59,6 +55,7 @@ const cancel = () => {
     margin: auto; /*중앙 정렬*/
     padding: 0 20px;
     margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .member .field{

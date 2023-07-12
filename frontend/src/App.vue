@@ -1,15 +1,14 @@
 <template>
   <div id="app">
     <div>
-      <button @click="login">{{ loginText }}</button>
+      <button @click="handleLogin">{{ loginText }}</button>
       <button @click="signIn">회원가입</button>
       <TeleportModal v-if="modalStore.modal.modalLogin">
-        <LoginModal @getUserInfo="getUserInfo"/>
+        <LoginModal @getUserInfo="getUserInfo" />
       </TeleportModal>
       <TeleportModal v-if="modalStore.modal.modalSignIn">
-        <SignInModal @postUserInfo="postUserInfo"/>
+        <SignInModal @postUserInfo="postUserInfo" />
       </TeleportModal>
-      
     </div>
 
     <button @click="moveToHome">Home</button>
@@ -26,11 +25,13 @@ import LoginModal from '@/components/modal/LoginModal'
 import SignInModal from '@/components/modal/SignInModal';
 import { useModalStore } from './stores/modal';
 import { useListStore } from './stores/token';
+import { useLoginStore } from './stores/isLogin';
 import { postLogin, postSignIn } from '@/api/userApi.js';
 
 const router = useRouter();
 const modalStore = useModalStore();
 const listStore = useListStore();
+const loginStore = useLoginStore();
 
 const moveToHome = () => {
   router.push({ path: '/' })
@@ -41,19 +42,19 @@ const moveToMyPage = () => {
 
 function getUserInfo(email, password) {
   const accessToken = postLogin(email, password)
-  console.log(accessToken)
 
   listStore.addList({
     accessToken: accessToken,
   })
 
   loginText.value = "로그아웃"
+  loginStore.changeStatus();
 }
 
 function postUserInfo(email, password, name, phoneNumber) {
   const data = postSignIn(email, password, name, phoneNumber)
 
-  if(data.status == 400){
+  if (data.status == 400) {
     alert("이메일 중복")
   }
   else {
@@ -61,8 +62,14 @@ function postUserInfo(email, password, name, phoneNumber) {
   }
 }
 
-function login() {
-  modalStore.openModal('modalLogin');
+function handleLogin() {
+  if (loginText.value == "로그인") {
+    modalStore.openModal('modalLogin');
+  }
+  else {
+    loginText.value = "로그인";
+    loginStore.changeStatus();
+  }
 }
 
 function signIn() {
