@@ -1,10 +1,13 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
     <div>
-      <button @click="handleClick">{{ loginText }}</button>
+      <button @click="handleLogin">{{ loginText }}</button>
+      <button @click="signIn">회원가입</button>
       <TeleportModal v-if="modalStore.modal.modalLogin">
-        <LoginModal @getUserInfo="getUserInfo"/>
+        <LoginModal @getUserInfo="getUserInfo" />
+      </TeleportModal>
+      <TeleportModal v-if="modalStore.modal.modalSignIn">
+        <SignInModal @postUserInfo="postUserInfo" />
       </TeleportModal>
     </div>
 
@@ -19,13 +22,16 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import TeleportModal from '@/components/modal/TeleportModal.vue';
 import LoginModal from '@/components/modal/LoginModal'
+import SignInModal from '@/components/modal/SignInModal';
 import { useModalStore } from './stores/modal';
 import { useListStore } from './stores/token';
-import { postSignIn } from '@/api/userApi.js';
+import { useLoginStore } from './stores/isLogin';
+import { postLogin, postSignIn } from '@/api/userApi.js';
 
 const router = useRouter();
 const modalStore = useModalStore();
 const listStore = useListStore();
+const loginStore = useLoginStore();
 
 const moveToHome = () => {
   router.push({ path: '/' })
@@ -35,18 +41,39 @@ const moveToMyPage = () => {
 }
 
 function getUserInfo(email, password) {
-  const accessToken = postSignIn(email, password)
-  console.log(accessToken)
+  const accessToken = postLogin(email, password)
 
   listStore.addList({
     accessToken: accessToken,
   })
 
-  console.log(listStore.getDataAll)
+  loginText.value = "로그아웃"
+  loginStore.changeStatus();
 }
 
-function handleClick() {
-  modalStore.openModal('modalLogin');
+function postUserInfo(email, password, name, phoneNumber) {
+  const data = postSignIn(email, password, name, phoneNumber)
+
+  if (data.status == 400) {
+    alert("이메일 중복")
+  }
+  else {
+    alert("회원가입 성공")
+  }
+}
+
+function handleLogin() {
+  if (loginText.value == "로그인") {
+    modalStore.openModal('modalLogin');
+  }
+  else {
+    loginText.value = "로그인";
+    loginStore.changeStatus();
+  }
+}
+
+function signIn() {
+  modalStore.openModal('modalSignIn');
 }
 
 const loginText = ref("로그인");

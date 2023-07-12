@@ -1,18 +1,25 @@
-import { createConnection } from "mysql";
+import mysql from "mysql";
 
-const connection = createConnection({
-    host: "localhost",
-    port: "3306",
-    multipleStatements: true,
-      typeCast: function (field, next) {
-          if (field.type == 'VAR_STRING') {
-              return field.string();
-          }
-          return next();
-      },
-    user: "root",
-    password: "dpqj1231",
-    database: "blogDB",
-  });
-  
-export default connection;
+class Database {
+  constructor() {
+    this.connection = mysql.createConnection({
+      host: "127.0.0.1",
+      port: "3306",
+      user: "root",
+      password: "dpqj1231",
+      database: "blogDB",
+    });
+  }
+
+  query = async (sql, args) => {
+    return await new Promise((resolve, reject) => {
+      this.connection.query(sql, args, (err, rows) => {
+        if (err)
+          return reject(err);
+        resolve(rows);
+      });
+    });
+  }
+}
+
+export default Database;
