@@ -52,17 +52,18 @@ export const login = (req, res, next) => {
   
   const createToken = () => {
     const userId = userInfo.user_id
-    let token = ""
-    let salt = ""
     const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    crypto.randomBytes(64, (err, buf) => {
-      crypto.pbkdf2(userInfo.pw, buf.toString('base64'), 100000, 64, 'sha256', (err, key) => {
-        token = key.toString('base64')
-        salt = buf.toString('base64')
+    crypto.randomBytes(64, (err, buf)=>{
+      const salt = buf.toString('base64')
+      const key = crypto.scryptSync("DEVER", salt, 32).toString('base64').substring(0, 32)
+      const iv = Buffer.alloc(16, 0)
+      const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+      let token = cipher.update(userInfo.pw, 'utf8', 'base64');
+      token += cipher.final('base64');
 
-        insertToken(userId, token, salt, currentDate)
-      });
-    });
+      insertToken(userId, token, key, currentDate)
+    })
+    
   }
 
   const insertToken = (userId, token, salt, date) => {
