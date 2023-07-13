@@ -14,7 +14,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="item in list" :key="item.id">
+            <tr v-for="item in props.items" :key="item.id">
                 <td class="text-left">{{ item.id }}</td>
                 <td class="text-left">{{ item.title }}</td>
                 <td class="text-left">{{ item.writer }}</td>
@@ -23,25 +23,6 @@
     </v-table>
 </template>
 <script setup>
-const list = [
-    { id: 1, title: '첫 번째 게시글', writer: 'artistjay' },
-    { id: 2, title: '두 번째 게시글', writer: 'artistjay' },
-    { id: 3, title: '세 번째 게시글', writer: 'artistjay' },
-    { id: 4, title: '네 번째 게시글', writer: 'artistjay' },
-    { id: 5, title: '다섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-]
+import { defineProps } from 'vue';
+const props = defineProps(['items']);
 </script>
