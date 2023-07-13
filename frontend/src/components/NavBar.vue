@@ -8,7 +8,7 @@
                 <b-navbar-nav>
                     <b-nav-item @click="moveToMachineBoard">머신러닝</b-nav-item>
                     <b-nav-item @click="moveToDataBoard">데이터분석</b-nav-item>
-                    <b-nav-item @click="moveToProgrammingBoard">프로그래밍</b-nav-item>
+                    <b-nav-item @click="moveToAIBoard">인공지능</b-nav-item>
                 </b-navbar-nav>
 
                 <!-- Right aligned nav items -->
@@ -57,8 +57,8 @@ function moveToMachineBoard() {
 function moveToDataBoard() {
   router.push('/board/data');
 }
-function moveToProgrammingBoard() {
-  router.push('/board/program');
+function moveToAIBoard() {
+  router.push('/board/AI');
 }
 
 function getUserInfo(email, password) {

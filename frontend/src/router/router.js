@@ -14,8 +14,8 @@ const routes = [
         component: () => import('@/pages/DataAnalysis'),
     },
     {
-        path: '/board/program',
-        component: () => import('@/pages/Programming'),
+        path: '/board/AI',
+        component: () => import('@/pages/AI'),
     },
 ];
 
