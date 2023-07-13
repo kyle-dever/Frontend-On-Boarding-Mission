@@ -14,7 +14,7 @@
 
 <style>
 .backdrop {
-    z-index: 999;
+    z-index: 1050;
     margin: 0 auto;
     position: fixed;
     left: 0;
@@ -28,6 +28,7 @@
     display: flex;
     flex-direction: column;
     justify-items: center;
+    margin-top: 10px;
 }
 
 </style>

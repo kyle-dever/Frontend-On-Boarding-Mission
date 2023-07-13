@@ -17,14 +17,13 @@
 
 <script setup>
 import { useModalStore } from "@/stores/modal";
-
 import { ref, defineEmits } from "vue";
 
 const emit = defineEmits(['getUserInfo'])
 const modalStore = useModalStore();
 
-const email = ref('email');
-const password = ref('password');
+const email = ref('');
+const password = ref('');
 
 const confirm = () => {
     emit('getUserInfo', email.value, password.value)
@@ -44,8 +43,6 @@ const cancel = () => {
     width: 400px;
     margin: auto; /*중앙 정렬*/
     padding: 0 20px;
-    margin-bottom: 20px;
-    margin-top: 20px;
 }
 
 .member .field{
