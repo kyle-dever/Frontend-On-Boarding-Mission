@@ -1,6 +1,6 @@
 <template>
   <h1 class="text-left">인공지능</h1>
-  <BoardList v-model="list" @clicked-board="clickedBoard" />
+  <BoardList :list="list" @clickedBoard="clickedBoard" />
 </template>
 
 <script setup>
