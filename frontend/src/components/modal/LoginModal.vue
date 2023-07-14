@@ -2,11 +2,11 @@
   <div class="member">
     <div class="field">
       <b>아이디</b>
-      <input type="text" v-model="email" />
+      <input type="text" v-model="email" required />
     </div>
     <div class="field">
       <b>비밀번호</b>
-      <input type="password" v-model="password" />
+      <input type="password" v-model="password" required />
     </div>
     <div class="button">
       <input type="submit" value="확인" @click="confirm" />

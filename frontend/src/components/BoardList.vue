@@ -19,15 +19,13 @@
       </tr>
     </tbody>
   </v-table>
-  <div class="page">
-    <b-pagination
-      v-model="currentPage"
-      :total-rows="totalRows"
-      :perPage="perPage"
-      align="center"
-      @page-click="pageClick"
-    ></b-pagination>
-  </div>
+  <b-pagination
+    v-model="currentPage"
+    :total-rows="totalRows"
+    :perPage="perPage"
+    align="center"
+    @page-click="pageClick"
+  ></b-pagination>
 </template>
 
 <script setup>
@@ -44,6 +42,7 @@ const handleClick = (id) => {
 };
 
 const pageClick = (bvEvent, page) => {
+  console.log(bvEvent);
   emits('clickedPage', page);
 };
 </script>

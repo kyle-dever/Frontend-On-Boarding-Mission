@@ -32,9 +32,6 @@ export const useBoardStore = defineStore('board', {
       category;
       return this.list.slice(0, 10);
     },
-    getSecondList() {
-      return this.list.slice(11, 20);
-    },
     getList(category, page) {
       category;
       const start = (page - 1) * 10 + 1;

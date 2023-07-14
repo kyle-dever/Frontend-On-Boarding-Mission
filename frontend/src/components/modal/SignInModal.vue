@@ -2,19 +2,21 @@
   <div class="member">
     <div class="field">
       <b>아이디</b>
-      <span class="placehold-text"><input type="text" v-model="email" /></span>
+      <span class="placehold-text"
+        ><input type="text" v-model="email" required
+      /></span>
     </div>
     <div class="field">
       <b>비밀번호</b>
-      <input class="userpw" type="password" v-model="password" />
+      <input class="userpw" type="password" v-model="password" required />
     </div>
     <div class="field">
       <b>이름</b>
-      <input class="name" type="text" v-model="name" />
+      <input class="name" type="text" v-model="name" required />
     </div>
     <div class="field">
       <b>전화번호</b>
-      <input class="number" type="text" v-model="phoneNumber" />
+      <input class="number" type="text" v-model="phoneNumber" required />
     </div>
     <div class="button">
       <input type="submit" @click="confirm" value="가입하기" />
@@ -41,7 +43,7 @@ const confirm = () => {
     email.value,
     password.value,
     name.value,
-    phoneNumber.value,
+    phoneNumber.value
   );
   modalStore.closeModal('modalSignIn');
 };
