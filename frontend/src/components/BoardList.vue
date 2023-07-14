@@ -42,7 +42,6 @@ const handleClick = (id) => {
 };
 
 const pageClick = (bvEvent, page) => {
-  console.log(bvEvent);
   emits('clickedPage', page);
 };
 </script>
