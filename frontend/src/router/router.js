@@ -17,6 +17,10 @@ const routes = [
     path: '/board/AI',
     component: () => import('@/pages/AI'),
   },
+  {
+    path: '/board/write',
+    component: () => import('@/pages/BoardWrite'),
+  },
 ];
 
 const router = createRouter({

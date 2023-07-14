@@ -22,6 +22,9 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
           <b-nav-item @click="handleLogin">{{ loginText }}</b-nav-item>
+          <b-nav-item @click="boardWrite" v-if="!loginStore.isLogin"
+            >게시글 작성</b-nav-item
+          >
           <b-nav-item @click="signIn" v-if="!loginStore.isLogin"
             >회원가입</b-nav-item
           >
@@ -69,6 +72,9 @@ function moveToDataBoard() {
 function moveToAIBoard() {
   router.push('/board/AI');
 }
+function moveToBoardWrite() {
+  router.push('/board/Write');
+}
 
 function getUserInfo(email, password) {
   const accessToken = postLogin(email, password);
@@ -98,6 +104,10 @@ function handleLogin() {
     loginText.value = '로그인';
     loginStore.changeStatus();
   }
+}
+
+function boardWrite() {
+  moveToBoardWrite();
 }
 
 function signIn() {
