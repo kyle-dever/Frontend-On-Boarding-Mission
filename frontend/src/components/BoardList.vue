@@ -19,16 +19,31 @@
       </tr>
     </tbody>
   </v-table>
+  <div class="page">
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="totalRows"
+      :perPage="perPage"
+      align="center"
+      @page-click="pageClick"
+    ></b-pagination>
+  </div>
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
-const props = defineProps(['list']);
-const emits = defineEmits(['clickedBoard']);
+import { ref, defineProps, defineEmits } from 'vue';
+const props = defineProps(['list', 'rows']);
+const emits = defineEmits(['clickedBoard', 'clickedPage']);
 
-console.log(props);
+const currentPage = ref(1);
+const perPage = 10;
+const totalRows = props.rows;
 
 const handleClick = (id) => {
   emits('clickedBoard', id);
+};
+
+const pageClick = (bvEvent, page) => {
+  emits('clickedPage', page);
 };
 </script>
