@@ -39,18 +39,18 @@
 </template>
 
 <script setup>
-import TeleportModal from "./modal/TeleportModal.vue";
-import LoginModal from "./modal/LoginModal.vue";
-import SignInModal from "./modal/SignInModal.vue";
+import TeleportModal from './modal/TeleportModal.vue';
+import LoginModal from './modal/LoginModal.vue';
+import SignInModal from './modal/SignInModal.vue';
 
-import { ref } from "vue";
+import { ref } from 'vue';
 
-import { useRouter } from "vue-router";
-import { useModalStore } from "@/stores/modal";
-import { useListStore } from "@/stores/token";
-import { useLoginStore } from "@/stores/isLogin";
+import { useRouter } from 'vue-router';
+import { useModalStore } from '@/stores/modal';
+import { useListStore } from '@/stores/token';
+import { useLoginStore } from '@/stores/isLogin';
 
-import { postLogin, postSignIn } from "@/api/userApi.js";
+import { postLogin, postSignIn } from '@/api/userApi.js';
 
 const router = useRouter();
 const modalStore = useModalStore();
@@ -58,16 +58,16 @@ const listStore = useListStore();
 const loginStore = useLoginStore();
 
 function moveToHome() {
-  router.push("/");
+  router.push('/');
 }
 function moveToMachineBoard() {
-  router.push("/board/machine");
+  router.push('/board/machine');
 }
 function moveToDataBoard() {
-  router.push("/board/data");
+  router.push('/board/data');
 }
 function moveToAIBoard() {
-  router.push("/board/AI");
+  router.push('/board/AI');
 }
 
 function getUserInfo(email, password) {
@@ -77,7 +77,7 @@ function getUserInfo(email, password) {
     accessToken: accessToken,
   });
 
-  loginText.value = "로그아웃";
+  loginText.value = '로그아웃';
   loginStore.changeStatus();
 }
 
@@ -85,26 +85,26 @@ function postUserInfo(email, password, name, phoneNumber) {
   const data = postSignIn(email, password, name, phoneNumber);
 
   if (data.status == 400) {
-    alert("이메일 중복");
+    alert('이메일 중복');
   } else {
-    alert("회원가입 성공");
+    alert('회원가입 성공');
   }
 }
 
 function handleLogin() {
-  if (loginText.value == "로그인") {
-    modalStore.openModal("modalLogin");
+  if (loginText.value == '로그인') {
+    modalStore.openModal('modalLogin');
   } else {
-    loginText.value = "로그인";
+    loginText.value = '로그인';
     loginStore.changeStatus();
   }
 }
 
 function signIn() {
-  modalStore.openModal("modalSignIn");
+  modalStore.openModal('modalSignIn');
 }
 
-const loginText = ref("로그인");
+const loginText = ref('로그인');
 </script>
 
 <style>

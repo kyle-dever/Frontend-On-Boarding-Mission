@@ -16,21 +16,21 @@
 </template>
 
 <script setup>
-import { useModalStore } from "@/stores/modal";
-import { ref, defineEmits } from "vue";
+import { useModalStore } from '@/stores/modal';
+import { ref, defineEmits } from 'vue';
 
-const emit = defineEmits(["getUserInfo"]);
+const emit = defineEmits(['getUserInfo']);
 const modalStore = useModalStore();
 
-const email = ref("");
-const password = ref("");
+const email = ref('');
+const password = ref('');
 
 const confirm = () => {
-  emit("getUserInfo", email.value, password.value);
-  modalStore.closeModal("modalLogin");
+  emit('getUserInfo', email.value, password.value);
+  modalStore.closeModal('modalLogin');
 };
 const cancel = () => {
-  modalStore.closeModal("modalLogin");
+  modalStore.closeModal('modalLogin');
 };
 </script>
 
@@ -54,7 +54,7 @@ const cancel = () => {
   margin-bottom: 5px;
 }
 
-.member input:not(input[type="radio"]),
+.member input:not(input[type='radio']),
 .member select {
   border: 1px solid #dadada;
   padding: 15px;
@@ -62,8 +62,8 @@ const cancel = () => {
   margin-bottom: 5px;
 }
 
-.member input[type="button"],
-.member input[type="submit"] {
+.member input[type='button'],
+.member input[type='submit'] {
   background-color: #2db400;
   color: #fff;
 }

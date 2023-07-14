@@ -1,7 +1,7 @@
-import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
 
-export const useListStore = defineStore("token", () => {
+export const useListStore = defineStore('token', () => {
   const list = ref([]);
 
   function addList(param) {

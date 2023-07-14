@@ -8,7 +8,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="item in props.items" :key="item.id">
+      <tr v-for="item in props.items" :key="item.id" @click="handleClick(id)">
         <td class="text-left">{{ item.id }}</td>
         <td class="text-left">{{ item.title }}</td>
         <td class="text-left">{{ item.writer }}</td>
@@ -18,6 +18,11 @@
 </template>
 
 <script setup>
-import { defineProps } from "vue";
-const props = defineProps(["items"]);
+import { defineProps, defineEmits } from 'vue';
+const props = defineProps(['items']);
+const emits = defineEmits(['clickedBoard']);
+
+const handleClick = (id) => {
+  emits('clickedBoard', id);
+};
 </script>

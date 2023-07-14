@@ -24,29 +24,29 @@
 </template>
 
 <script setup>
-import { useModalStore } from "@/stores/modal";
-import { ref, defineEmits } from "vue";
+import { useModalStore } from '@/stores/modal';
+import { ref, defineEmits } from 'vue';
 
-const emit = defineEmits(["postUserInfo"]);
+const emit = defineEmits(['postUserInfo']);
 const modalStore = useModalStore();
 
-const email = ref("");
-const password = ref("");
-const name = ref("");
-const phoneNumber = ref("");
+const email = ref('');
+const password = ref('');
+const name = ref('');
+const phoneNumber = ref('');
 
 const confirm = () => {
   emit(
-    "postUserInfo",
+    'postUserInfo',
     email.value,
     password.value,
     name.value,
-    phoneNumber.value
+    phoneNumber.value,
   );
-  modalStore.closeModal("modalSignIn");
+  modalStore.closeModal('modalSignIn');
 };
 const cancel = () => {
-  modalStore.closeModal("modalSignIn");
+  modalStore.closeModal('modalSignIn');
 };
 </script>
 
@@ -72,7 +72,7 @@ const cancel = () => {
   margin-bottom: 5px;
 }
 
-.member input:not(input[type="radio"]),
+.member input:not(input[type='radio']),
 .member select {
   border: 1px solid #dadada;
   padding: 15px;
@@ -80,8 +80,8 @@ const cancel = () => {
   margin-bottom: 5px;
 }
 
-.member input[type="button"],
-.member input[type="submit"] {
+.member input[type='button'],
+.member input[type='submit'] {
   background-color: #2db400;
   color: #fff;
 }
