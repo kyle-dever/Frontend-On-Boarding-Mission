@@ -10,5 +10,4 @@ export const useListStore = defineStore("token", () => {
 
   const getDataAll = computed(() => list.value);
   return { list, addList, getDataAll };
-  
 });
