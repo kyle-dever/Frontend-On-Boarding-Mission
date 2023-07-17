@@ -17,6 +17,11 @@
     </div>
 
     <div class="form-item">
+      <label for="thumbnail"> 썸네일 : </label>
+      <button id="thumbnail">이미지 가져오기</button>
+    </div>
+
+    <div class="form-item">
       <label for="content">내용</label>
       <quill-editor
         id="content"
@@ -28,7 +33,7 @@
     </div>
 
     <div class="form-item">
-      <button type="submit">작성하기</button>
+      <button class="submit" type="submit">작성하기</button>
     </div>
   </form>
 </template>
@@ -125,7 +130,8 @@ const onEditorReady = (editor) => {
 }
 
 input,
-select {
+select,
+.submit {
   margin-left: 10px;
   border: 1px gray solid;
   border-radius: 5px;
