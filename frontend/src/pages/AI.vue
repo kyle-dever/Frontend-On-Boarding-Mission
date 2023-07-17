@@ -1,39 +1,36 @@
 <template>
-    <h1 class="text-left">인공지능</h1>
-    <BoardList v-model:items="list"/>
+  <h1 class="text-left">인공지능</h1>
+  <BoardList
+    :list="list"
+    :rows="boardStore.getRows()"
+    @clickedBoard="clickedBoard"
+    @clickedPage="clickedPage"
+  />
 </template>
 
 <script setup>
 import BoardList from '@/components/BoardList.vue';
 
-const list = [
-    { id: 1, title: '첫 번째 게시글', writer: 'artistjay' },
-    { id: 2, title: '두 번째 게시글', writer: 'artistjay' },
-    { id: 3, title: '세 번째 게시글', writer: 'artistjay' },
-    { id: 4, title: '네 번째 게시글', writer: 'artistjay' },
-    { id: 5, title: '다섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-    { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-]
+import { ref } from 'vue';
+import { useBoardStore } from '@/stores/board';
 
+const boardStore = useBoardStore();
+const list = ref([]);
+list.value = boardStore.getFirstList('AI');
+
+const clickedBoard = (id) => {
+  console.log('clicked: ' + id);
+};
+
+const clickedPage = (page) => {
+  list.value = boardStore.getList('AI', page);
+};
 </script>
 
 <style scoped>
 .text-left {
-    margin-top: 100px;
-    margin-left: 50px;
-    margin-bottom: 20px;
+  margin-top: 100px;
+  margin-left: 50px;
+  margin-bottom: 20px;
 }
 </style>
