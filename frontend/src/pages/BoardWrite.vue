@@ -17,11 +17,6 @@
     </div>
 
     <div class="form-item">
-      <label for="thumbnail"> 썸네일 : </label>
-      <button id="thumbnail">이미지 가져오기</button>
-    </div>
-
-    <div class="form-item">
       <label for="content">내용</label>
       <quill-editor
         id="content"
@@ -46,6 +41,7 @@ import { postImage } from '@/api/boardApi';
 const title = ref('');
 const category = ref('');
 const content = ref('');
+const thumbnail = ref('');
 
 const onEditorChange = (event) => {
   content.value = event.html;
@@ -76,6 +72,7 @@ const submitForm = () => {
   console.log('카테고리:', category.value);
   // 여기서 게시글 작성 로직을 처리하면 됩니다.
   console.log('내용:', content.value);
+  console.log('썸네일:', thumbnail.value);
 };
 
 const onEditorReady = (editor) => {
@@ -100,6 +97,8 @@ const onEditorReady = (editor) => {
 
           // 커서 위치에 이미지 삽입
           editor.insertEmbed(range.index, 'image', imgUrl);
+
+          if (thumbnail.value == '') thumbnail.value = imgUrl;
         });
       } catch (error) {
         console.log(error);
