@@ -137,7 +137,7 @@ dist
 .webpack/
 
 # Optional stylelint cache
-.public/
+public/
 
 # SvelteKit build / generate output
 .svelte-kit
