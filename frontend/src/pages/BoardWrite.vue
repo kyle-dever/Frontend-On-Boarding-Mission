@@ -22,7 +22,9 @@
         id="content"
         :options="toolbarOptions"
         @change="onEditorChange($event)"
-      ></quill-editor>
+        @ready="onEditorReady($event)"
+      >
+      </quill-editor>
     </div>
 
     <div class="form-item">
@@ -34,27 +36,32 @@
 <script setup>
 import { ref } from 'vue';
 import { quillEditor } from 'vue3-quill';
+import { postImage } from '@/api/boardApi';
 
 const title = ref('');
 const category = ref('');
 const content = ref('');
 
-const onEditorChange = (e) => {
-  content.value = e.html;
+const onEditorChange = (event) => {
+  content.value = event.html;
 };
+
+const toolbars = [
+  ['bold', 'italic', 'underline', 'strike'],
+  ['blockquote', 'code-block'],
+  [{ list: 'ordered' }, { list: 'bullet' }],
+  [{ indent: '-1' }, { indent: '+1' }],
+  [{ size: ['small', false, 'large', 'huge'] }],
+  [{ header: [1, 2, 3, 4, 5, 6, false] }],
+  [{ align: [] }],
+  ['image'],
+];
 
 const toolbarOptions = {
   modules: {
-    toolbar: [
-      ['bold', 'italic', 'underline', 'strike'],
-      ['blockquote', 'code-block'],
-      [{ list: 'ordered' }, { list: 'bullet' }],
-      [{ indent: '-1' }, { indent: '+1' }],
-      [{ size: ['small', false, 'large', 'huge'] }],
-      [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      [{ align: [] }],
-      ['image'],
-    ],
+    toolbar: {
+      container: toolbars,
+    },
   },
 };
 
@@ -64,6 +71,38 @@ const submitForm = () => {
   console.log('카테고리:', category.value);
   // 여기서 게시글 작성 로직을 처리하면 됩니다.
   console.log('내용:', content.value);
+};
+
+const onEditorReady = (editor) => {
+  function imageHandler() {
+    // 1. 이미지를 저장할 input type=file DOM을 만든다.
+    const input = document.createElement('input');
+    // 속성 써주기
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click(); // 에디터 이미지버튼을 클릭하면 이 input이 클릭된다.
+    // input이 클릭되면 파일 선택창이 나타난다.
+
+    // input에 변화가 생긴다면 = 이미지를 선택
+    input.addEventListener('change', async () => {
+      const file = input.files[0];
+      const fd = new FormData(); //반드시 필요
+      fd.append('img', file); //4번
+      try {
+        postImage(fd).then((imgUrl) => {
+          // 현재 에디터 커서 위치 조회
+          const range = editor.getSelection();
+
+          // 커서 위치에 이미지 삽입
+          editor.insertEmbed(range.index, 'image', imgUrl);
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    });
+  }
+
+  editor.getModule('toolbar').addHandler('image', imageHandler);
 };
 </script>
 
