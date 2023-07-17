@@ -20,6 +20,7 @@
       <label for="content">내용</label>
       <quill-editor
         id="content"
+        :options="toolbarOptions"
         @change="onEditorChange($event)"
       ></quill-editor>
     </div>
@@ -40,6 +41,21 @@ const content = ref('');
 
 const onEditorChange = (e) => {
   content.value = e.html;
+};
+
+const toolbarOptions = {
+  modules: {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],
+      ['blockquote', 'code-block'],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ indent: '-1' }, { indent: '+1' }],
+      [{ size: ['small', false, 'large', 'huge'] }],
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ align: [] }],
+      ['image'],
+    ],
+  },
 };
 
 const submitForm = () => {
