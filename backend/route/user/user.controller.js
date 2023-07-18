@@ -67,12 +67,12 @@ export const login = (req, res, next) => {
     const payloads = [userInfo.email, userInfo.name];
 
     const refreshToken = jwt.sign({}, process.env.JWT_SECRET, {
-      expiresIn: '10s',
+      expiresIn: '14d',
       issuer: 'admin',
     });
 
     const accessToken = jwt.sign({ payloads }, process.env.JWT_SECRET, {
-      expiresIn: '1s',
+      expiresIn: '15m',
       issuer: 'admin',
     });
 
@@ -120,7 +120,7 @@ export const reissue = (req, res, next) => {
     .query(`SELECT * FROM Token WHERE refresh_token = ?;`, refreshToken)
     .then(() => {
       accessToken = jwt.sign({ refreshToken }, process.env.JWT_SECRET, {
-        expiresIn: '10s',
+        expiresIn: '15m',
         issuer: 'admin',
       });
 
