@@ -7,8 +7,7 @@ export const postLogin = async (email, password) => {
   };
 
   const response = await axios.post('/api/user/login', user);
-
-  return response.data.token;
+  return response;
 };
 
 export const postSignIn = async (email, pw, userName, phoneNumber) => {

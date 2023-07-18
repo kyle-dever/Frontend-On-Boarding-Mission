@@ -1,13 +1,18 @@
 import { defineStore } from 'pinia';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 
-export const useListStore = defineStore('token', () => {
-  const list = ref([]);
+export const useTokenStore = defineStore('token', () => {
+  const list = ref({
+    accessToken: '',
+    refreshToken: '',
+  });
 
-  function addList(param) {
-    list.value.push(param);
+  function reissue(token) {
+    list.value.accessToken = token;
   }
 
-  const getDataAll = computed(() => list.value);
-  return { list, addList, getDataAll };
+  function initTokens(param) {
+    list.value = param;
+  }
+  return { list, reissue, initTokens };
 });
