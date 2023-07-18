@@ -5,6 +5,6 @@ const router = Router();
 
 router.post('/signin', userMiddleware.signin);
 router.post('/login', userMiddleware.login);
-router.get('/reissue', userMiddleware.reissue);
+router.post('/reissue', userMiddleware.reissue);
 
 export default router;

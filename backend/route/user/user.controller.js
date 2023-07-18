@@ -67,12 +67,12 @@ export const login = (req, res, next) => {
     const payloads = [userInfo.email, userInfo.name];
 
     const refreshToken = jwt.sign({}, process.env.JWT_SECRET, {
-      expiresIn: '14d',
+      expiresIn: '10s',
       issuer: 'admin',
     });
 
     const accessToken = jwt.sign({ payloads }, process.env.JWT_SECRET, {
-      expiresIn: '15m',
+      expiresIn: '1s',
       issuer: 'admin',
     });
 
@@ -96,11 +96,44 @@ export const login = (req, res, next) => {
 
 export const reissue = (req, res, next) => {
   const database = new Database();
-  const refreshToken = req.header.refreshToken;
+  const refreshToken = req.body.refreshToken;
+  let accessToken;
+
+  dotenv.config();
+  try {
+    req.decoded = jwt.verify(req.body.refreshToken, process.env.JWT_SECRET);
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(419).json({
+        code: 419,
+        message: '토큰이 만료되었습니다.',
+      });
+    } else {
+      return res.status(401).json({
+        code: 401,
+        message: '유효하지 않은 토큰입니다.',
+      });
+    }
+  }
 
   database
-    .query(`SELECT * FROM Token WHERE refresh_token = ?`, refreshToken)
-    .then((result) => {
-      console.log(result);
+    .query(`SELECT * FROM Token WHERE refresh_token = ?;`, refreshToken)
+    .then(() => {
+      accessToken = jwt.sign({ refreshToken }, process.env.JWT_SECRET, {
+        expiresIn: '10s',
+        issuer: 'admin',
+      });
+
+      return database.query(
+        `UPDATE Token SET access_token = ? WHERE refresh_token = ?;`,
+        [accessToken, refreshToken]
+      );
+    })
+    .then(() => {
+      return res.send({
+        status: 200,
+        message: 'New Token Issued',
+        accessToken: accessToken,
+      });
     });
 };
