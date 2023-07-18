@@ -83,8 +83,8 @@ function moveToBoard() {
 function getUserInfo(email, password) {
   postLogin(email, password).then((res) => {
     tokenStore.initTokens({
-      accessToken: res.data.token,
-      refreshToken: '',
+      accessToken: res.data.accessToken,
+      refreshToken: res.data.refreshToken,
     });
   });
 

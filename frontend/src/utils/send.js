@@ -67,11 +67,11 @@ instance.interceptors.response.use(
 
       // 재발행된 토큰으로 다시 요청
       const accessToken = tokenStore.getAccessToken;
+      accessToken;
+      // error.config.headers['authorization'] = accessToken;
 
-      error.config.headers['authorization'] = accessToken;
-
-      const response = await axios.request(error.config);
-      return response;
+      // const response = await axios.request(error.config);
+      // return response;
     } else if (error.response?.status == 401) {
       alert('로그인 정보가 만료되었습니다.\n다시 로그인 해주세요.');
       // 로그아웃 후 다시 로그인 창 띄우기
