@@ -17,7 +17,6 @@
           <b-nav-item @click="moveToMachineBoard">머신러닝</b-nav-item>
           <b-nav-item @click="moveToDataBoard">데이터분석</b-nav-item>
           <b-nav-item @click="moveToAIBoard">인공지능</b-nav-item>
-          <b-nav-item @click="moveToBoard">게시글 조회</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -78,9 +77,6 @@ function moveToAIBoard() {
 }
 function moveToBoardWrite() {
   router.push('/board/Write');
-}
-function moveToBoard() {
-  router.push('/board/board');
 }
 
 function getUserInfo(email, password) {

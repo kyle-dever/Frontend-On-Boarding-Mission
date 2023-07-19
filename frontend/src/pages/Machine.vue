@@ -1,31 +1,48 @@
 <template>
   <h1 class="text-left">머신러닝</h1>
-  <BoardList v-model="list" />
+  <BoardList
+    :list="datas"
+    :rows="totalCount"
+    @clickedBoard="clickedBoard"
+    @clickedPage="clickedPage"
+  />
 </template>
 
 <script setup>
 import BoardList from '@/components/BoardList.vue';
+import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { getBoardListFromCategory } from '@/api/boardApi';
 
-const list = [
-  { id: 1, title: '첫 번째 게시글', writer: 'artistjay' },
-  { id: 2, title: '두 번째 게시글', writer: 'artistjay' },
-  { id: 3, title: '세 번째 게시글', writer: 'artistjay' },
-  { id: 4, title: '네 번째 게시글', writer: 'artistjay' },
-  { id: 5, title: '다섯 번째 게시글', writer: 'artistjay' },
-  { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-  { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-  { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-  { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-  { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-  { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-  { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-  { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-  { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-  { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-  { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-  { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-  { id: 6, title: '여섯 번째 게시글', writer: 'artistjay' },
-];
+const datas = ref([]);
+const hasNext = ref(true);
+const totalCount = ref(0);
+const router = useRouter();
+
+const clickedBoard = (id) => {
+  router.push({
+    path: '/board/board',
+    query: {
+      id: `${id}`,
+    },
+  });
+};
+
+const clickedPage = (page) => {
+  getBoardList('머신러닝', page);
+};
+
+const getBoardList = (category, page) => {
+  getBoardListFromCategory(category, page).then((result) => {
+    datas.value = result.data.boards;
+    totalCount.value = result.data.totalCount;
+    hasNext.value = result.data.hasNext;
+  });
+};
+
+onMounted(() => {
+  getBoardList('머신러닝', 1);
+});
 </script>
 
 <style scoped>

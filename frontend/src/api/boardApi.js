@@ -33,7 +33,7 @@ export const getBoardListAll = async () => {
 
 export const getBoardListFromCategory = async (category, page) => {
   const response = await axios.get('/api/getBoard/Category', {
-    query: {
+    params: {
       category: category,
       page: page,
     },

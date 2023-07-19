@@ -1,8 +1,8 @@
 <template>
   <h1 class="text-left">인공지능</h1>
   <BoardList
-    :list="datas.value"
-    :rows="totalCount.value"
+    :list="datas"
+    :rows="totalCount"
     @clickedBoard="clickedBoard"
     @clickedPage="clickedPage"
   />
@@ -23,7 +23,7 @@ const clickedBoard = (id) => {
   router.push({
     path: '/board/board',
     query: {
-      id: id,
+      id: `${id}`,
     },
   });
 };
@@ -34,9 +34,9 @@ const clickedPage = (page) => {
 
 const getBoardList = (category, page) => {
   getBoardListFromCategory(category, page).then((result) => {
-    datas.value = result.boards;
-    totalCount.value = result.totalCount;
-    hasNext.value = result.hasNext;
+    datas.value = result.data.boards;
+    totalCount.value = result.data.totalCount;
+    hasNext.value = result.data.hasNext;
   });
 };
 
