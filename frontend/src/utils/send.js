@@ -25,7 +25,7 @@ instance.interceptors.request.use(
     // 요청 바로 직전
     // axios 설정값에 대해 작성합니다.
     const tokenStore = useTokenStore();
-    const accessToken = tokenStore.list.accessToken;
+    const accessToken = tokenStore.accessToken;
 
     config.headers['authorization'] = accessToken;
     return config;
@@ -64,7 +64,7 @@ instance.interceptors.response.use(
       alert('토큰 만료');
       // 토큰 재발행
       const tokenStore = useTokenStore();
-      const refreshToken = tokenStore.list.refreshToken;
+      const refreshToken = tokenStore.refreshToken;
 
       let reissue;
       try {

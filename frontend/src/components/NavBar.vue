@@ -17,12 +17,16 @@
           <b-nav-item @click="moveToMachineBoard">머신러닝</b-nav-item>
           <b-nav-item @click="moveToDataBoard">데이터분석</b-nav-item>
           <b-nav-item @click="moveToAIBoard">인공지능</b-nav-item>
-          <b-nav-item @click="moveToBoard">게시글 조회</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-item @click="handleLogin">{{ loginText }}</b-nav-item>
+          <b-nav-item @click="handleLogin" v-if="!loginStore.isLogin"
+            >로그인</b-nav-item
+          >
+          <b-nav-item @click="handleLogin" v-if="loginStore.isLogin"
+            >로그아웃</b-nav-item
+          >
           <b-nav-item @click="boardWrite" v-if="loginStore.isLogin"
             >게시글 작성</b-nav-item
           >
@@ -46,8 +50,6 @@
 import TeleportModal from './modal/TeleportModal.vue';
 import LoginModal from './modal/LoginModal.vue';
 import SignInModal from './modal/SignInModal.vue';
-
-import { ref } from 'vue';
 
 import { useRouter } from 'vue-router';
 import { useModalStore } from '@/stores/modal';
@@ -76,9 +78,6 @@ function moveToAIBoard() {
 function moveToBoardWrite() {
   router.push('/board/Write');
 }
-function moveToBoard() {
-  router.push('/board/board');
-}
 
 function getUserInfo(email, password) {
   postLogin(email, password).then((res) => {
@@ -87,10 +86,8 @@ function getUserInfo(email, password) {
       refreshToken: res.data.refreshToken,
     });
     loginStore.initUserInfo(res.data.userInfo);
-    console.log(loginStore.userInfo);
   });
 
-  loginText.value = '로그아웃';
   loginStore.changeStatus();
 }
 
@@ -105,10 +102,9 @@ function postUserInfo(email, password, name, phoneNumber) {
 }
 
 function handleLogin() {
-  if (loginText.value == '로그인') {
+  if (!loginStore.isLogin) {
     modalStore.openModal('modalLogin');
   } else {
-    loginText.value = '로그인';
     loginStore.changeStatus();
   }
 }
@@ -120,8 +116,6 @@ function boardWrite() {
 function signIn() {
   modalStore.openModal('modalSignIn');
 }
-
-const loginText = ref('로그인');
 </script>
 
 <style>

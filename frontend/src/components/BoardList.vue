@@ -11,9 +11,9 @@
       <tr
         v-for="item in props.list"
         :key="item.id"
-        @click="handleClick(item.id)"
+        @click="handleClick(item.board_id)"
       >
-        <td class="text-left">{{ item.id }}</td>
+        <td class="text-left">{{ item.board_id }}</td>
         <td class="text-left">{{ item.title }}</td>
         <td class="text-left">{{ item.writer }}</td>
       </tr>
@@ -21,7 +21,7 @@
   </v-table>
   <b-pagination
     v-model="currentPage"
-    :total-rows="totalRows"
+    :total-rows="props.rows"
     :perPage="perPage"
     align="center"
     @page-click="pageClick"
@@ -35,7 +35,6 @@ const emits = defineEmits(['clickedBoard', 'clickedPage']);
 
 const currentPage = ref(1);
 const perPage = 10;
-const totalRows = props.rows;
 
 const handleClick = (id) => {
   emits('clickedBoard', id);

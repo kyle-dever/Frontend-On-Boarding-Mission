@@ -3,7 +3,9 @@ import App from './App.vue';
 const app = createApp(App);
 
 import { createPinia } from 'pinia';
+import piniaPersist from 'pinia-plugin-persist';
 const pinia = createPinia();
+pinia.use(piniaPersist);
 app.use(pinia);
 
 import router from './router/router';

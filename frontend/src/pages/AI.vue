@@ -1,8 +1,8 @@
 <template>
   <h1 class="text-left">인공지능</h1>
   <BoardList
-    :list="list"
-    :rows="boardStore.getRows()"
+    :list="datas"
+    :rows="totalCount"
     @clickedBoard="clickedBoard"
     @clickedPage="clickedPage"
   />
@@ -10,21 +10,39 @@
 
 <script setup>
 import BoardList from '@/components/BoardList.vue';
+import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import { getBoardListFromCategory } from '@/api/boardApi';
 
-import { ref } from 'vue';
-import { useBoardStore } from '@/stores/board';
-
-const boardStore = useBoardStore();
-const list = ref([]);
-list.value = boardStore.getFirstList('AI');
+const datas = ref([]);
+const hasNext = ref(true);
+const totalCount = ref(0);
+const router = useRouter();
 
 const clickedBoard = (id) => {
-  console.log('clicked: ' + id);
+  router.push({
+    path: '/board/board',
+    query: {
+      id: `${id}`,
+    },
+  });
 };
 
 const clickedPage = (page) => {
-  list.value = boardStore.getList('AI', page);
+  getBoardList('인공지능', page);
 };
+
+const getBoardList = (category, page) => {
+  getBoardListFromCategory(category, page).then((result) => {
+    datas.value = result.data.boards;
+    totalCount.value = result.data.totalCount;
+    hasNext.value = result.data.hasNext;
+  });
+};
+
+onMounted(() => {
+  getBoardList('인공지능', 1);
+});
 </script>
 
 <style scoped>

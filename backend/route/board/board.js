@@ -31,6 +31,7 @@ const upload = multer({
   }),
 });
 
-router.post('/upload', upload.single('img'), boardMiddleware.postImage);
+router.post('/upload/image', upload.single('img'), boardMiddleware.postImage);
+router.post('/upload/board', boardMiddleware.postBoard);
 
 export default router;
