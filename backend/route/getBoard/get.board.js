@@ -6,5 +6,6 @@ const router = Router();
 router.get('/Home', getMiddleware.getList);
 router.get('/Category', getMiddleware.getListFromCategory);
 router.get('/Count', getMiddleware.getCount);
+router.get('/board', getMiddleware.getBoardFromId);
 
 export default router;

@@ -4,8 +4,8 @@
     <div v-if="loading">로딩 중...</div>
     <div v-else>
       <div>
-        <h2>제목 :{{ post.title }}</h2>
-        <h5>작성자: {{ post.author }}</h5>
+        <h2>제목 : {{ post.title }}</h2>
+        <h5>작성자: {{ post.writer }}</h5>
       </div>
       <div class="content-wrapper">
         <div v-html="post.content"></div>
@@ -15,13 +15,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { useRoute } from 'vue-router';
+import { onMounted, ref } from 'vue';
+import { getBoardFromId } from '@/api/boardApi';
 
-const post = ref({
-  title: 'HIHI',
-  author: 'Kyle',
-  content:
-    '<p>안녕하세욥</p><p><br></p><p><img src="http://localhost:3000/uploads/스크린샷 2023-07-17 오전 9.25.522023-07-17T08-56-36.582Z.png"></p><p><br></p><p>하이루~~</p>',
+const route = useRoute();
+const boardId = route.query.id;
+
+const post = ref(null);
+const loading = ref(true);
+
+onMounted(() => {
+  getBoardFromId(boardId).then((result) => {
+    post.value = result.data.board;
+    loading.value = false;
+  });
 });
 </script>
 

@@ -36,7 +36,7 @@ export const getListFromCategory = (req, res) => {
       if (page == 1) offset = 0;
       else offset = (page - 1) * 10;
 
-      const boardQuery = `SELECT * FROM Board WHERE category = ? ORDER BY board_id DESC LIMIT 10 OFFSET ${offset}`;
+      const boardQuery = `SELECT board_id, writer, title, thumbnail, created_at FROM Board WHERE category = ? ORDER BY board_id DESC LIMIT 10 OFFSET ${offset}`;
 
       return database.query(boardQuery, [category, page]);
     })
@@ -49,4 +49,18 @@ export const getListFromCategory = (req, res) => {
         hasNext: hasNext,
       });
     });
+};
+
+export const getBoardFromId = (req, res) => {
+  const database = new Database();
+
+  const boardId = req.query.id;
+  const boardQuery = `SELECT board_id, writer, title, content FROM Board WHERE board_id = ${boardId}`;
+
+  database.query(boardQuery).then((result) => {
+    return res.send({
+      status: 200,
+      board: result[0],
+    });
+  });
 };

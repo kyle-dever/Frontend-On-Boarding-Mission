@@ -41,3 +41,13 @@ export const getBoardListFromCategory = async (category, page) => {
 
   return response;
 };
+
+export const getBoardFromId = async (boardId) => {
+  const response = await axios.get('/api/getBoard/board', {
+    params: {
+      id: boardId,
+    },
+  });
+
+  return response;
+};

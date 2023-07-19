@@ -23,8 +23,8 @@ const routes = [
   },
   {
     path: '/board/board',
+    name: 'Board',
     component: () => import('@/pages/Board/Board'),
-    props: true,
   },
 ];
 
