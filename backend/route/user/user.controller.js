@@ -1,15 +1,19 @@
-import Database from '../../database/database.js';
-import crypto from 'crypto';
-import moment from 'moment';
-import 'moment-timezone';
+import Database from '../../utils/database.js';
+import moment from 'moment-timezone';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 
 export const signin = (req, res) => {
+  moment.tz.setDefault('Asia/Seoul');
+  const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
+
   const database = new Database();
   const userInfo = [
     req.body.email,
     req.body.pw,
     req.body.userName,
     req.body.phoneNumber,
+    createdAt,
   ];
 
   const isExistEmailQuery = `SELECT * FROM User WHERE email = ?;`;
@@ -25,7 +29,7 @@ export const signin = (req, res) => {
         message: '중복된 이메일입니다.',
       });
     } else {
-      const queryString = `INSERT INTO User (email, pw, user_name, phone_number) VALUES (?, ?, ?, ?);`;
+      const queryString = `INSERT INTO User (email, pw, user_name, phone_number, created_at) VALUES (?, ?, ?, ?, ?);`;
       database.query(queryString, userInfo).then(() => {
         return res.status(201).json({
           code: 201,
@@ -37,6 +41,8 @@ export const signin = (req, res) => {
 };
 
 export const login = (req, res, next) => {
+  dotenv.config();
+
   const database = new Database();
   let userInfo = {};
   const params = [req.body.email, req.body.pw];
@@ -53,42 +59,81 @@ export const login = (req, res, next) => {
         userInfo = result[0];
         createToken();
       }
-    });
+    })
+    .then(() => database.close());
 
   const createToken = () => {
     const userId = userInfo.user_id;
+    const payloads = [userInfo.email, userInfo.name];
 
-    moment.tz.setDefault('Asia/Seoul');
-    const currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
-
-    crypto.randomBytes(64, (err, buf) => {
-      const salt = buf.toString('base64');
-      const key = crypto
-        .scryptSync('DEVER', salt, 32)
-        .toString('base64')
-        .substring(0, 32);
-      const iv = Buffer.alloc(16, 0);
-      const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
-      let token = cipher.update(userInfo.pw, 'utf8', 'base64');
-      token += cipher.final('base64');
-
-      insertToken(userId, token, key, currentDate);
+    const refreshToken = jwt.sign({}, process.env.JWT_SECRET, {
+      expiresIn: '14d',
+      issuer: 'admin',
     });
-  };
 
-  const insertToken = (userId, token, salt, date) => {
-    const params = [userId, token, salt, date];
+    const accessToken = jwt.sign({ payloads }, process.env.JWT_SECRET, {
+      expiresIn: '15m',
+      issuer: 'admin',
+    });
+
+    const params = [userId, refreshToken, accessToken];
+
     const queryString =
-      `INSERT INTO Token VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE ` +
-      `access_token = VALUES(access_token), ` +
-      `salt = VALUES(salt), ` +
-      `created_at = VALUES(created_at);`;
+      `INSERT INTO Token VALUES (?, ?, ?) ` +
+      `ON DUPLICATE KEY UPDATE ` +
+      `refresh_token = values(refresh_token), ` +
+      `access_token = values(access_token)`;
     database.query(queryString, params).then(() => {
       return res.status(200).json({
         code: 200,
         message: 'token is created',
-        token: token,
+        refreshToken: refreshToken,
+        accessToken: accessToken,
       });
     });
   };
+};
+
+export const reissue = (req, res, next) => {
+  const database = new Database();
+  const refreshToken = req.body.refreshToken;
+  let accessToken;
+
+  dotenv.config();
+  try {
+    req.decoded = jwt.verify(req.body.refreshToken, process.env.JWT_SECRET);
+  } catch (error) {
+    if (error.name === 'TokenExpiredError') {
+      return res.status(419).json({
+        code: 419,
+        message: '토큰이 만료되었습니다.',
+      });
+    } else {
+      return res.status(401).json({
+        code: 401,
+        message: '유효하지 않은 토큰입니다.',
+      });
+    }
+  }
+
+  database
+    .query(`SELECT * FROM Token WHERE refresh_token = ?;`, refreshToken)
+    .then(() => {
+      accessToken = jwt.sign({ refreshToken }, process.env.JWT_SECRET, {
+        expiresIn: '15m',
+        issuer: 'admin',
+      });
+
+      return database.query(
+        `UPDATE Token SET access_token = ? WHERE refresh_token = ?;`,
+        [accessToken, refreshToken]
+      );
+    })
+    .then(() => {
+      return res.send({
+        status: 200,
+        message: 'New Token Issued',
+        accessToken: accessToken,
+      });
+    });
 };

@@ -1,4 +1,4 @@
-import Database from '../../database/database.js';
+import Database from '../../utils/database.js';
 
 export const getList = (req, res) => {};
 export const postImage = (req, res) => {

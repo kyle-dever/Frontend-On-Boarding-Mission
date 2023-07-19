@@ -64,16 +64,36 @@ instance.interceptors.response.use(
       alert('토큰 만료');
       // 토큰 재발행
       const tokenStore = useTokenStore();
+      const refreshToken = tokenStore.list.refreshToken;
+
+      let reissue;
+      try {
+        reissue = await axios.post('/api/user/reissue', {
+          refreshToken: refreshToken,
+        });
+      } catch (error) {
+        console.error(error);
+        alert('로그인 정보가 만료되었습니다.\n다시 로그인 해주세요.');
+        // 로그아웃 후 다시 로그인 창 띄우기
+        const loginStore = useLoginStore();
+        loginStore.changeStatus();
+
+        const modalStore = useModalStore();
+        modalStore.openModal('modalLogin');
+
+        return;
+      }
+
+      const accessToken = reissue.data.accessToken;
+      tokenStore.reissue(accessToken);
 
       // 재발행된 토큰으로 다시 요청
-      const accessToken = tokenStore.getAccessToken;
-
       error.config.headers['authorization'] = accessToken;
 
       const response = await axios.request(error.config);
       return response;
     } else if (error.response?.status == 401) {
-      alert('로그인 정보가 만료되었습니다.\n다시 로그인 해주세요.');
+      alert('로그인 정보가 일치하지 않습니다.\n다시 로그인 해주세요.');
       // 로그아웃 후 다시 로그인 창 띄우기
       const loginStore = useLoginStore();
       loginStore.changeStatus();

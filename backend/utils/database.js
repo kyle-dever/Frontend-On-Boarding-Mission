@@ -19,6 +19,15 @@ class Database {
       });
     });
   };
+
+  close = async () => {
+    return await new Promise((resolve, reject) => {
+      this.connection.end((err) => {
+        if (err) return reject(err);
+        resolve();
+      });
+    });
+  };
 }
 
 export default Database;
