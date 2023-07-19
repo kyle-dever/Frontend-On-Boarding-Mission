@@ -86,6 +86,8 @@ function getUserInfo(email, password) {
       accessToken: res.data.accessToken,
       refreshToken: res.data.refreshToken,
     });
+    loginStore.initUserInfo(res.data.userInfo);
+    console.log(loginStore.userInfo);
   });
 
   loginText.value = '로그아웃';

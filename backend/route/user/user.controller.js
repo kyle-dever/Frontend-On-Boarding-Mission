@@ -78,6 +78,11 @@ export const login = (req, res, next) => {
 
     const params = [userId, refreshToken, accessToken];
 
+    const signedUser = {
+      userId: userInfo.user_id,
+      userName: userInfo.user_name,
+    };
+
     const queryString =
       `INSERT INTO Token VALUES (?, ?, ?) ` +
       `ON DUPLICATE KEY UPDATE ` +
@@ -89,6 +94,7 @@ export const login = (req, res, next) => {
         message: 'token is created',
         refreshToken: refreshToken,
         accessToken: accessToken,
+        userInfo: signedUser,
       });
     });
   };
@@ -97,7 +103,6 @@ export const login = (req, res, next) => {
 export const reissue = (req, res, next) => {
   const database = new Database();
   const refreshToken = req.body.refreshToken;
-  let accessToken;
 
   dotenv.config();
   try {
@@ -116,19 +121,16 @@ export const reissue = (req, res, next) => {
     }
   }
 
-  database
-    .query(`SELECT * FROM Token WHERE refresh_token = ?;`, refreshToken)
-    .then(() => {
-      accessToken = jwt.sign({ refreshToken }, process.env.JWT_SECRET, {
-        expiresIn: '15m',
-        issuer: 'admin',
-      });
+  const accessToken = jwt.sign({ refreshToken }, process.env.JWT_SECRET, {
+    expiresIn: '15m',
+    issuer: 'admin',
+  });
 
-      return database.query(
-        `UPDATE Token SET access_token = ? WHERE refresh_token = ?;`,
-        [accessToken, refreshToken]
-      );
-    })
+  database
+    .query(`UPDATE Token SET access_token = ? WHERE refresh_token = ?;`, [
+      accessToken,
+      refreshToken,
+    ])
     .then(() => {
       return res.send({
         status: 200,
