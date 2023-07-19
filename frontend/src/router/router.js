@@ -21,6 +21,10 @@ const routes = [
     path: '/board/write',
     component: () => import('@/pages/BoardWrite'),
   },
+  {
+    path: '/board/board',
+    component: () => import('@/pages/Board/Board'),
+  },
 ];
 
 const router = createRouter({

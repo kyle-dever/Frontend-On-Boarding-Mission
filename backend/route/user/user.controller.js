@@ -1,5 +1,7 @@
-import Database from "../../database/database.js";
-import crypto from "crypto";
+import Database from '../../database/database.js';
+import crypto from 'crypto';
+import moment from 'moment';
+import 'moment-timezone';
 
 export const signin = (req, res) => {
   const database = new Database();
@@ -20,14 +22,14 @@ export const signin = (req, res) => {
     if (flag) {
       return res.status(409).json({
         code: 409,
-        message: "중복된 이메일입니다.",
+        message: '중복된 이메일입니다.',
       });
     } else {
       const queryString = `INSERT INTO User (email, pw, user_name, phone_number) VALUES (?, ?, ?, ?);`;
       database.query(queryString, userInfo).then(() => {
         return res.status(201).json({
           code: 201,
-          message: "회원가입 성공",
+          message: '회원가입 성공',
         });
       });
     }
@@ -45,7 +47,7 @@ export const login = (req, res, next) => {
       if (!result) {
         return res.status(400).json({
           code: 400,
-          message: "이메일 또는 비밀번호를 확인해주세요.",
+          message: '이메일 또는 비밀번호를 확인해주세요.',
         });
       } else {
         userInfo = result[0];
@@ -55,17 +57,20 @@ export const login = (req, res, next) => {
 
   const createToken = () => {
     const userId = userInfo.user_id;
-    const currentDate = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+    moment.tz.setDefault('Asia/Seoul');
+    const currentDate = moment().format('YYYY-MM-DD HH:mm:ss');
+
     crypto.randomBytes(64, (err, buf) => {
-      const salt = buf.toString("base64");
+      const salt = buf.toString('base64');
       const key = crypto
-        .scryptSync("DEVER", salt, 32)
-        .toString("base64")
+        .scryptSync('DEVER', salt, 32)
+        .toString('base64')
         .substring(0, 32);
       const iv = Buffer.alloc(16, 0);
-      const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
-      let token = cipher.update(userInfo.pw, "utf8", "base64");
-      token += cipher.final("base64");
+      const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
+      let token = cipher.update(userInfo.pw, 'utf8', 'base64');
+      token += cipher.final('base64');
 
       insertToken(userId, token, key, currentDate);
     });
@@ -81,7 +86,7 @@ export const login = (req, res, next) => {
     database.query(queryString, params).then(() => {
       return res.status(200).json({
         code: 200,
-        message: "token is created",
+        message: 'token is created',
         token: token,
       });
     });

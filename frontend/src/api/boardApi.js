@@ -1,14 +1,12 @@
-import axios from 'axios';
-// import { useTokenStore } from '@/stores/token';
+import instance from '@/utils/send';
 
 export const postImage = async (imageFile) => {
-  // const tokenStore = useTokenStore();
-  // const token = tokenStore.getDataAll()[0];
-  const response = await axios.post('/api/board/upload', imageFile, {
-    headers: {
-      authorization: 'njAtkoWdUivPLz14/9IvNw==',
-    },
-  });
-
-  return response.data.url;
+  try {
+    // 위에서 지정한 baseURL 뒤에 다음 URL이 붙는다.
+    const response = await instance.post('/api/board/upload', imageFile);
+    return response.data.url;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
 };

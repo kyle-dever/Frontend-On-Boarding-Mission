@@ -17,12 +17,13 @@
           <b-nav-item @click="moveToMachineBoard">머신러닝</b-nav-item>
           <b-nav-item @click="moveToDataBoard">데이터분석</b-nav-item>
           <b-nav-item @click="moveToAIBoard">인공지능</b-nav-item>
+          <b-nav-item @click="moveToBoard">게시글 조회</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
           <b-nav-item @click="handleLogin">{{ loginText }}</b-nav-item>
-          <b-nav-item @click="boardWrite" v-if="!loginStore.isLogin"
+          <b-nav-item @click="boardWrite" v-if="loginStore.isLogin"
             >게시글 작성</b-nav-item
           >
           <b-nav-item @click="signIn" v-if="!loginStore.isLogin"
@@ -50,14 +51,14 @@ import { ref } from 'vue';
 
 import { useRouter } from 'vue-router';
 import { useModalStore } from '@/stores/modal';
-import { useListStore } from '@/stores/token';
+import { useTokenStore } from '@/stores/token';
 import { useLoginStore } from '@/stores/isLogin';
 
 import { postLogin, postSignIn } from '@/api/userApi.js';
 
 const router = useRouter();
 const modalStore = useModalStore();
-const listStore = useListStore();
+const tokenStore = useTokenStore();
 const loginStore = useLoginStore();
 
 function moveToHome() {
@@ -75,12 +76,16 @@ function moveToAIBoard() {
 function moveToBoardWrite() {
   router.push('/board/Write');
 }
+function moveToBoard() {
+  router.push('/board/board');
+}
 
 function getUserInfo(email, password) {
-  const accessToken = postLogin(email, password);
-
-  listStore.addList({
-    accessToken: accessToken,
+  postLogin(email, password).then((res) => {
+    tokenStore.initTokens({
+      accessToken: res.data.token,
+      refreshToken: '',
+    });
   });
 
   loginText.value = '로그아웃';

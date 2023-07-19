@@ -1,13 +1,17 @@
 import Database from '../database/database.js';
 import crypto from 'crypto';
+import moment from 'moment';
+import 'moment-timezone';
 
 export const auth = (req, res, next) => {
   const database = new Database();
   let error = '';
 
   const expireCheck = (createdAt) => {
-    const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
-    if (currentDate - createdAt > 900000) {
+    moment.tz.setDefault('Asia/Seoul');
+    const currentDate = moment();
+
+    if (currentDate - createdAt > 10) {
       return 'ExpiredToken';
     }
     return '';
@@ -19,8 +23,10 @@ export const auth = (req, res, next) => {
   database.query(tokenQueryString, token).then((result) => {
     tokenInfo = result[0];
     error = expireCheck(tokenInfo.created_at);
-    if (error == 'ExpiredToken') return;
-    else findUser();
+    if (error == 'ExpiredToken') {
+      errHandle();
+      return;
+    } else findUser();
   });
 
   const decodeCrypto = async (token, salt) => {
@@ -43,20 +49,23 @@ export const auth = (req, res, next) => {
       if (decodedPw.localeCompare(userInfo.pw) != 0) {
         error = 'InvalidToken';
       }
+      errHandle();
     });
   };
 
-  if (error == 'ExpiredToken') {
-    return res.status(419).json({
-      code: 419,
-      message: '토큰이 만료되었습니다.',
-    });
-  } else if (error == 'InvalidToken') {
-    return res.status(401).json({
-      code: 401,
-      message: '유효하지 않은 토큰입니다.',
-    });
-  } else {
-    next();
-  }
+  const errHandle = () => {
+    if (error == 'ExpiredToken') {
+      return res.status(419).json({
+        code: 419,
+        message: '토큰이 만료되었습니다.',
+      });
+    } else if (error == 'InvalidToken') {
+      return res.status(401).json({
+        code: 401,
+        message: '유효하지 않은 토큰입니다.',
+      });
+    } else {
+      next();
+    }
+  };
 };
