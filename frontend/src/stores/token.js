@@ -1,18 +1,23 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
 
-export const useTokenStore = defineStore('token', () => {
-  const list = ref({
-    accessToken: '',
-    refreshToken: '',
-  });
-
-  function reissue(token) {
-    list.value.accessToken = token;
-  }
-
-  function initTokens(param) {
-    list.value = param;
-  }
-  return { list, reissue, initTokens };
+export const useTokenStore = defineStore('token', {
+  state: () => {
+    return {
+      accessToken: '',
+      refreshToken: '',
+    };
+  },
+  actions: {
+    reissue(token) {
+      this.accessToken = token;
+    },
+    initTokens(param) {
+      this.accessToken = param.accessToken;
+      this.refreshToken = param.refreshToken;
+    },
+  },
+  persist: {
+    enabled: true,
+    strategies: [{ storage: localStorage }],
+  },
 });

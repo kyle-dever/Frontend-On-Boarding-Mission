@@ -22,7 +22,12 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
-          <b-nav-item @click="handleLogin">{{ loginText }}</b-nav-item>
+          <b-nav-item @click="handleLogin" v-if="!loginStore.isLogin"
+            >로그인</b-nav-item
+          >
+          <b-nav-item @click="handleLogin" v-if="loginStore.isLogin"
+            >로그아웃</b-nav-item
+          >
           <b-nav-item @click="boardWrite" v-if="loginStore.isLogin"
             >게시글 작성</b-nav-item
           >
@@ -46,8 +51,6 @@
 import TeleportModal from './modal/TeleportModal.vue';
 import LoginModal from './modal/LoginModal.vue';
 import SignInModal from './modal/SignInModal.vue';
-
-import { ref } from 'vue';
 
 import { useRouter } from 'vue-router';
 import { useModalStore } from '@/stores/modal';
@@ -89,7 +92,6 @@ function getUserInfo(email, password) {
     loginStore.initUserInfo(res.data.userInfo);
   });
 
-  loginText.value = '로그아웃';
   loginStore.changeStatus();
 }
 
@@ -104,10 +106,9 @@ function postUserInfo(email, password, name, phoneNumber) {
 }
 
 function handleLogin() {
-  if (loginText.value == '로그인') {
+  if (!loginStore.isLogin) {
     modalStore.openModal('modalLogin');
   } else {
-    loginText.value = '로그인';
     loginStore.changeStatus();
   }
 }
@@ -119,8 +120,6 @@ function boardWrite() {
 function signIn() {
   modalStore.openModal('modalSignIn');
 }
-
-const loginText = ref('로그인');
 </script>
 
 <style>

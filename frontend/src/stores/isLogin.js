@@ -15,4 +15,8 @@ export const useLoginStore = defineStore('login', {
       this.userInfo = userInfo;
     },
   },
+  persist: {
+    enabled: true,
+    strategies: [{ storage: localStorage }],
+  },
 });

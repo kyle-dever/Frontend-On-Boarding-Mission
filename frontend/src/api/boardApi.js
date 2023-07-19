@@ -1,4 +1,5 @@
 import instance from '@/utils/send';
+import axios from 'axios';
 
 export const postImage = async (imageFile) => {
   try {
@@ -26,12 +27,12 @@ export const postBoard = async (params) => {
 };
 
 export const getBoardListAll = async () => {
-  const response = await instance.get('/api/getBoard/Home');
+  const response = await axios.get('/api/getBoard/Home');
   return response;
 };
 
 export const getBoardListFromCategory = async (category, page) => {
-  const response = await instance.get('/api/getBoard/Category', {
+  const response = await axios.get('/api/getBoard/Category', {
     query: {
       category: category,
       page: page,
