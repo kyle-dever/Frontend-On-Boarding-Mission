@@ -8,6 +8,7 @@ import express from 'express';
 import { auth } from './middleware/authMiddleware.js';
 import userRouter from './route/user/user.js';
 import boardRouter from './route/board/board.js';
+import getBoardRouter from './route/getBoard/get.board.js';
 
 const port = 3000;
 const app = express();
@@ -17,6 +18,7 @@ app.use('/uploads', express.static('public/uploads'));
 
 app.use('/api/user', userRouter);
 app.use('/api/board', auth, boardRouter);
+app.use('/api/getBoard', getBoardRouter);
 
 app.get('/', (req, res) => {
   res.json({
@@ -25,7 +27,7 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`server is listening at localhost:${port}`);
+  console.log(`Hi! server is listening at localhost:${port}`);
 });
 
 app.get('/api/payload', auth, (req, res) => {

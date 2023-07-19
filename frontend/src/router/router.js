@@ -24,6 +24,7 @@ const routes = [
   {
     path: '/board/board',
     component: () => import('@/pages/Board/Board'),
+    props: true,
   },
 ];
 

@@ -24,3 +24,19 @@ export const postBoard = async (params) => {
   const response = await instance.post('/api/board/upload/board', board);
   return response;
 };
+
+export const getBoardListAll = async () => {
+  const response = await instance.get('/api/getBoard/Home');
+  return response;
+};
+
+export const getBoardListFromCategory = async (category, page) => {
+  const response = await instance.get('/api/getBoard/Category', {
+    query: {
+      category: category,
+      page: page,
+    },
+  });
+
+  return response;
+};

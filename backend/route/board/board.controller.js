@@ -1,8 +1,6 @@
 import Database from '../../utils/database.js';
 import moment from 'moment-timezone';
 
-export const getList = (req, res) => {};
-
 export const postImage = (req, res) => {
   const IMG_URL = `http://localhost:3000/uploads/${req.file.filename}`;
   return res.send({

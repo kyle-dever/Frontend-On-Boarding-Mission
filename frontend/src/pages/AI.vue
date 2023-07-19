@@ -15,15 +15,14 @@ import { ref } from 'vue';
 import { useBoardStore } from '@/stores/board';
 
 const boardStore = useBoardStore();
-const list = ref([]);
-list.value = boardStore.getFirstList('AI');
+const datas = ref([]);
 
 const clickedBoard = (id) => {
   console.log('clicked: ' + id);
 };
 
 const clickedPage = (page) => {
-  list.value = boardStore.getList('AI', page);
+  datas.value = boardStore.getList('AI', page);
 };
 </script>
 
