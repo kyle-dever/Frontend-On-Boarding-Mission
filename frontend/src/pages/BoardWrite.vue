@@ -36,12 +36,18 @@
 <script setup>
 import { ref } from 'vue';
 import { quillEditor } from 'vue3-quill';
+import { useRouter } from 'vue-router';
 import { postImage } from '@/api/boardApi';
+import { useLoginStore } from '@/stores/isLogin';
+import { postBoard } from '@/api/boardApi';
 
 const title = ref('');
 const category = ref('');
 const content = ref('');
 const thumbnail = ref('');
+
+const loginStore = useLoginStore();
+const router = useRouter();
 
 const onEditorChange = (event) => {
   content.value = event.html;
@@ -67,12 +73,23 @@ const toolbarOptions = {
 };
 
 const submitForm = () => {
-  // 게시글 작성 폼 제출 시 실행되는 로직
-  console.log('제목:', title.value);
-  console.log('카테고리:', category.value);
-  // 여기서 게시글 작성 로직을 처리하면 됩니다.
-  console.log('내용:', content.value);
-  console.log('썸네일:', thumbnail.value);
+  const params = {
+    userId: loginStore.userInfo.userId,
+    userName: loginStore.userInfo.userName,
+    category: category.value,
+    title: title.value,
+    thumbnail: thumbnail.value,
+    content: content.value,
+  };
+
+  postBoard(params).then((res) => {
+    if (res.data.status == 200) {
+      alert('게시글 작성이 완료되었습니다.');
+      router.push('/');
+    } else {
+      alert('다시 시도해주세요.');
+    }
+  });
 };
 
 const onEditorReady = (editor) => {
