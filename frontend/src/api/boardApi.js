@@ -51,3 +51,11 @@ export const getBoardFromId = async (boardId) => {
 
   return response;
 };
+
+export const deleteBoardFromId = async (boardId) => {
+  const response = await instance.delete('/api/board/delete/board', {
+    params: { boardId: boardId },
+  });
+
+  return response;
+};

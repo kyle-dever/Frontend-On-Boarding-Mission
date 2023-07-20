@@ -43,7 +43,7 @@
   <TeleportModal v-if="modalStore.modal.modalSignIn">
     <SignInModal @postUserInfo="postUserInfo" />
   </TeleportModal>
-  <router-view></router-view>
+  <router-view :key="route.fullPath"></router-view>
 </template>
 
 <script setup>
@@ -51,7 +51,7 @@ import TeleportModal from './modal/TeleportModal.vue';
 import LoginModal from './modal/LoginModal.vue';
 import SignInModal from './modal/SignInModal.vue';
 
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useModalStore } from '@/stores/modal';
 import { useTokenStore } from '@/stores/token';
 import { useLoginStore } from '@/stores/isLogin';
@@ -59,6 +59,7 @@ import { useLoginStore } from '@/stores/isLogin';
 import { postLogin, postSignIn } from '@/api/userApi.js';
 
 const router = useRouter();
+const route = useRoute();
 const modalStore = useModalStore();
 const tokenStore = useTokenStore();
 const loginStore = useLoginStore();
