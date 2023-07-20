@@ -36,20 +36,26 @@ import DeleteModal from '@/components/modal/DeleteModal.vue';
 const route = useRoute();
 const boardId = route.query.id;
 
-const post = ref({
-  title: '',
-  writer: '',
-  content: '',
-});
+const post = ref({});
 const loading = ref(true);
 
 const modalStore = useModalStore();
 const loginStore = useLoginStore();
 
 const modifyBoard = () => {
+  const isModify = true;
+  const boardInfo = {
+    boardId: boardId,
+    title: post.value.title,
+    category: post.value.category,
+    content: post.value.content,
+  };
   router.push({
-    path: '/board/write',
-    params: {},
+    name: 'Write',
+    params: {
+      isModify: isModify,
+      boardInfo: JSON.stringify(boardInfo),
+    },
   });
 };
 

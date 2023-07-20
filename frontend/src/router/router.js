@@ -19,6 +19,7 @@ const routes = [
   },
   {
     path: '/board/write',
+    name: 'Write',
     component: () => import('@/pages/BoardWrite'),
   },
   {

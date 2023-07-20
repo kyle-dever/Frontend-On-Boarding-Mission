@@ -49,3 +49,27 @@ export const deleteBoard = (req, res) => {
     });
   });
 };
+
+export const patchBoard = (req, res) => {
+  const database = new Database();
+
+  const body = req.body;
+
+  moment.tz.setDefault('Asia/Seoul');
+  const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
+  const updatePayload = [
+    body.title,
+    body.category,
+    body.thumbnail,
+    body.content,
+    createdAt,
+  ];
+
+  const boardQuery = `UPDATE Board SET title = ?, category = ?, thumbnail = ?, content = ?, created_at = ? WHERE board_id = ${body.boardId}`;
+  database.query(boardQuery, updatePayload).then(() => {
+    return res.send({
+      status: 200,
+      message: '성공적으로 수정 되었습니다.',
+    });
+  });
+};

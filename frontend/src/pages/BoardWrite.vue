@@ -20,6 +20,7 @@
       <label for="content">내용</label>
       <quill-editor
         id="content"
+        :content="content"
         :options="toolbarOptions"
         @change="onEditorChange($event)"
         @ready="onEditorReady($event)"
@@ -34,12 +35,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import { quillEditor } from 'vue3-quill';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { postImage } from '@/api/boardApi';
 import { useLoginStore } from '@/stores/isLogin';
-import { postBoard } from '@/api/boardApi';
+import { postBoard, updateBoardFromId } from '@/api/boardApi';
 
 const title = ref('');
 const category = ref('');
@@ -47,6 +48,13 @@ const content = ref('');
 
 const loginStore = useLoginStore();
 const router = useRouter();
+const route = useRoute();
+
+const isModify = route.params.isModify;
+let boardInfo;
+if (isModify) {
+  boardInfo = JSON.parse(route.params.boardInfo);
+}
 
 const onEditorChange = (event) => {
   content.value = event.html;
@@ -82,21 +90,40 @@ const submitForm = () => {
     content: content.value,
   };
 
-  postBoard(params).then((res) => {
-    if (res.data.status == 200) {
-      alert('게시글 작성이 완료되었습니다.');
-      router.push('/');
-    } else {
-      alert('다시 시도해주세요.');
-    }
-  });
+  if (isModify == undefined) {
+    postBoard(params).then((res) => {
+      if (res.data.status == 200) {
+        alert('게시글 작성이 완료되었습니다.');
+        router.push('/');
+      } else {
+        alert('다시 시도해주세요.');
+      }
+    });
+  } else {
+    const boardId = boardInfo.boardId;
+
+    const params = {
+      category: category.value,
+      title: title.value,
+      thumbnail: thumbnail,
+      content: content.value,
+      boardId: boardId,
+    };
+
+    updateBoardFromId(params).then(() => {
+      alert('게시글 수정이 완료되었습니다.');
+      router.go(-1);
+    });
+  }
 };
 
 const getFirstImage = () => {
   const regex = /(<img[^>]*src\s*=\s*["']?([^>"']+)["']?[^>]*>)/;
-  const image = regex.exec(content.value)[2];
-
-  return image;
+  if (regex.test(content.value)) {
+    return regex.exec(content.value)[2];
+  } else {
+    return '';
+  }
 };
 
 const onEditorReady = (editor) => {
@@ -132,6 +159,14 @@ const onEditorReady = (editor) => {
 
   editor.getModule('toolbar').addHandler('image', imageHandler);
 };
+
+onMounted(() => {
+  if (boardInfo != undefined) {
+    title.value = boardInfo.title;
+    category.value = boardInfo.category;
+    content.value = boardInfo.content;
+  }
+});
 </script>
 
 <style>
