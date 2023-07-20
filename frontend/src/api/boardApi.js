@@ -59,3 +59,8 @@ export const deleteBoardFromId = async (boardId) => {
 
   return response;
 };
+
+export const updateBoardFromId = async (params) => {
+  const response = await instance.patch('api/board/update/board', params);
+  return response;
+};

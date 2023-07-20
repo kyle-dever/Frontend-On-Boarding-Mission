@@ -55,7 +55,7 @@ export const getBoardFromId = (req, res) => {
   const database = new Database();
 
   const boardId = req.query.id;
-  const boardQuery = `SELECT board_id, writer, title, content FROM Board WHERE board_id = ${boardId}`;
+  const boardQuery = `SELECT board_id, writer, title, content, category FROM Board WHERE board_id = ${boardId}`;
 
   database.query(boardQuery).then((result) => {
     return res.send({
