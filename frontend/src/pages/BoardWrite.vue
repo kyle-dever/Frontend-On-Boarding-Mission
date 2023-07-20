@@ -44,7 +44,6 @@ import { postBoard } from '@/api/boardApi';
 const title = ref('');
 const category = ref('');
 const content = ref('');
-const thumbnail = ref('');
 
 const loginStore = useLoginStore();
 const router = useRouter();
@@ -73,12 +72,13 @@ const toolbarOptions = {
 };
 
 const submitForm = () => {
+  const thumbnail = getFirstImage();
   const params = {
     userId: loginStore.userInfo.userId,
     userName: loginStore.userInfo.userName,
     category: category.value,
     title: title.value,
-    thumbnail: thumbnail.value,
+    thumbnail: thumbnail,
     content: content.value,
   };
 
@@ -90,6 +90,13 @@ const submitForm = () => {
       alert('다시 시도해주세요.');
     }
   });
+};
+
+const getFirstImage = () => {
+  const regex = /(<img[^>]*src\s*=\s*["']?([^>"']+)["']?[^>]*>)/;
+  const image = regex.exec(content.value)[2];
+
+  return image;
 };
 
 const onEditorReady = (editor) => {
@@ -115,7 +122,7 @@ const onEditorReady = (editor) => {
           // 커서 위치에 이미지 삽입
           editor.insertEmbed(range.index, 'image', imgUrl);
 
-          if (thumbnail.value == '') thumbnail.value = imgUrl;
+          getFirstImage();
         });
       } catch (error) {
         console.log(error);
