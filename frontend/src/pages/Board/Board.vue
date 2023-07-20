@@ -26,7 +26,7 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
-import { getBoardFromId } from '@/api/boardApi';
+import { getBoardFromId, deleteBoardFromId } from '@/api/boardApi';
 import router from '@/router/router';
 import { useModalStore } from '@/stores/modal';
 import { useLoginStore } from '@/stores/isLogin';
@@ -58,7 +58,10 @@ const deleteBoard = () => {
 };
 
 const handleDelete = () => {
-  boardId;
+  deleteBoardFromId(boardId).then(() => {
+    alert('삭제가 완료 되었습니다.');
+  });
+  router.go(-1);
   // id로 Delete후 이전 페이지로 이동
 };
 

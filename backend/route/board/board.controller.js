@@ -35,3 +35,17 @@ export const postBoard = (req, res) => {
     });
   });
 };
+
+export const deleteBoard = (req, res) => {
+  const database = new Database();
+
+  const boardId = req.query.boardId;
+  const boardQuery = `DELETE FROM Board WHERE board_id = ${boardId}`;
+
+  database.query(boardQuery).then(() => {
+    return res.send({
+      status: 200,
+      message: '성공적으로 삭제 되었습니다.',
+    });
+  });
+};
