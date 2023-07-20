@@ -73,18 +73,18 @@ export const searchBoardFromKeyword = (req, res) => {
   }
 
   if (req.query.title != undefined) {
-    boardQuery += `title = '${req.query.title}' AND `;
-    countQuery += `title = '${req.query.title}' AND `;
+    boardQuery += `title LIKE '%${req.query.title}%' AND `;
+    countQuery += `title LIKE '%${req.query.title}%' AND `;
   }
 
   if (req.query.content != undefined) {
-    boardQuery += `content = '${req.query.content}' AND `;
-    countQuery += `content = '${req.query.content}' AND `;
+    boardQuery += `content LIKE '%${req.query.content}%' AND `;
+    countQuery += `content LIKE '%${req.query.content}%' AND `;
   }
 
   if (req.query.writer != undefined) {
-    boardQuery += `writer = '${req.query.writer}' AND `;
-    countQuery += `writer = '${req.query.writer}' AND `;
+    boardQuery += `writer LIKE '%${req.query.writer}%' AND `;
+    countQuery += `writer LIKE '%${req.query.writer}%' AND `;
   }
 
   boardQuery = boardQuery.replace(/ AND $/, '');
