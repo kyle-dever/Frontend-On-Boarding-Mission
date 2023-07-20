@@ -7,6 +7,7 @@ export const useModalStore = defineStore('modal', {
       modal: {
         modalLogin: false,
         modalSignIn: false,
+        modalDelete: false,
       },
     };
   },
