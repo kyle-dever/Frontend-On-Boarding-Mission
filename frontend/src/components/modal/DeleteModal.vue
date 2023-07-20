@@ -2,7 +2,7 @@
   <div class="container">
     <p>정말로 삭제하시겠습니까?</p>
     <div class="btn">
-      <input type="submit" value="삭제" @click="emits('handleDelete')" />
+      <input type="submit" value="삭제" @click="submit" />
       <input type="submit" value="취소" @click="cancel" />
     </div>
   </div>
@@ -15,6 +15,10 @@ import { defineEmits } from 'vue';
 const emits = defineEmits(['handleDelete']);
 const modalStore = useModalStore();
 
+const submit = () => {
+  modalStore.closeModal('modalDelete');
+  emits('handleDelete');
+};
 const cancel = () => {
   modalStore.closeModal('modalDelete');
 };

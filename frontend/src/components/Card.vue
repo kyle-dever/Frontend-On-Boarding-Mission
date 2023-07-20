@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-row class="align-self-stretch">
+    <b-row align-h="around">
       <b-card
         v-for="item in props.datas"
         :key="item.board_id"
@@ -9,7 +9,7 @@
         img-alt="No Image"
         img-top
         tag="article"
-        style="max-width: 20rem; height: 20rem; margin: 0 auto"
+        style="max-width: 24rem; height: 24rem; margin: 30px"
         class="mb-2"
         :footer="timestamp(item.created_at)"
         footer-tag="footer"

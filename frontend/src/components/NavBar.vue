@@ -21,6 +21,19 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
+          <b-nav-form @submit.prevent="handleSearch">
+            <b-form-input
+              required
+              size="sm"
+              class="mr-sm-2"
+              placeholder="Search"
+              v-model="keyword"
+            ></b-form-input>
+            <b-button size="sm" class="my-0 my-sm-0" type="submit"
+              >Search</b-button
+            >
+          </b-nav-form>
+
           <b-nav-item @click="handleLogin" v-if="!loginStore.isLogin"
             >로그인</b-nav-item
           >
@@ -57,6 +70,8 @@ import { useTokenStore } from '@/stores/token';
 import { useLoginStore } from '@/stores/isLogin';
 
 import { postLogin, postSignIn } from '@/api/userApi.js';
+
+import { ref } from 'vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -108,6 +123,12 @@ function handleLogin() {
   } else {
     loginStore.changeStatus();
   }
+}
+
+const keyword = ref(null);
+
+function handleSearch() {
+  console.log(keyword.value);
 }
 
 function boardWrite() {
