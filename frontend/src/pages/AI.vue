@@ -5,12 +5,13 @@
     :rows="totalCount"
     @clickedBoard="clickedBoard"
     @clickedPage="clickedPage"
+    :currentPage="route.query.page"
   />
 </template>
 
 <script setup>
 import BoardList from '@/components/BoardList.vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { ref, onMounted } from 'vue';
 import { getBoardListFromCategory } from '@/api/boardApi';
 
@@ -18,6 +19,7 @@ const datas = ref([]);
 const hasNext = ref(true);
 const totalCount = ref(0);
 const router = useRouter();
+const route = useRoute();
 
 const clickedBoard = (id) => {
   router.push({
@@ -29,6 +31,11 @@ const clickedBoard = (id) => {
 };
 
 const clickedPage = (page) => {
+  router.push({
+    query: {
+      page: `${page}`,
+    },
+  });
   getBoardList('인공지능', page);
 };
 
@@ -41,7 +48,7 @@ const getBoardList = (category, page) => {
 };
 
 onMounted(() => {
-  getBoardList('인공지능', 1);
+  getBoardList('인공지능', route.query.page);
 });
 </script>
 

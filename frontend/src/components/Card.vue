@@ -9,13 +9,13 @@
         img-alt="No Image"
         img-top
         tag="article"
-        style="max-width: 24rem; height: 24rem; margin: 30px"
+        style="max-width: 24rem; margin: 20px"
         class="mb-2"
         :footer="timestamp(item.created_at)"
         footer-tag="footer"
         @click="emits('getBoard', item.board_id)"
       >
-        <b-card-text> {{ item.writer }} </b-card-text>
+        <b-card-text>{{ item.writer }}</b-card-text>
       </b-card>
     </b-row>
   </div>

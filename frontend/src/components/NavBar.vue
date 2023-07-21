@@ -70,13 +70,28 @@ function moveToHome() {
   router.push('/');
 }
 function moveToMachineBoard() {
-  router.push('/board/machine');
+  router.push({
+    path: '/board/machine',
+    query: {
+      page: 1,
+    },
+  });
 }
 function moveToDataBoard() {
-  router.push('/board/data');
+  router.push({
+    path: '/board/data',
+    query: {
+      page: 1,
+    },
+  });
 }
 function moveToAIBoard() {
-  router.push('/board/AI');
+  router.push({
+    path: '/board/AI',
+    query: {
+      page: 1,
+    },
+  });
 }
 function moveToBoardWrite() {
   router.push('/board/Write');

@@ -2,9 +2,9 @@
   <v-table>
     <thead>
       <tr>
-        <th class="text-left">번호</th>
+        <th class="text-left" width="20%">번호</th>
         <th class="text-left">제목</th>
-        <th class="text-left">작성자</th>
+        <th class="text-left" width="20%">작성자</th>
       </tr>
     </thead>
     <tbody>
@@ -29,11 +29,11 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue';
-const props = defineProps(['list', 'rows']);
+import { ref, defineProps, defineEmits, onMounted } from 'vue';
+const props = defineProps(['list', 'rows', 'currentPage']);
 const emits = defineEmits(['clickedBoard', 'clickedPage']);
 
-const currentPage = ref(1);
+const currentPage = ref();
 const perPage = 10;
 
 const handleClick = (id) => {
@@ -43,4 +43,8 @@ const handleClick = (id) => {
 const pageClick = (bvEvent, page) => {
   emits('clickedPage', page);
 };
+
+onMounted(() => {
+  currentPage.value = props.currentPage;
+});
 </script>

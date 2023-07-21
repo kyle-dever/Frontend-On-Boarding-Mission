@@ -5,6 +5,7 @@ export const getList = (req, res) => {
 
   const boardQuery = `SELECT * FROM Board ORDER BY board_id DESC`;
   database.query(boardQuery).then((result) => {
+    database.close();
     return res.send({
       status: 200,
       boards: result,
@@ -38,6 +39,7 @@ export const getListFromCategory = (req, res) => {
     })
     .then((result) => {
       const hasNext = result.length == 10 ? true : false;
+      database.close();
       return res.send({
         status: 200,
         boards: result,
@@ -54,6 +56,7 @@ export const getBoardFromId = (req, res) => {
   const boardQuery = `SELECT board_id, writer, title, content, category FROM Board WHERE board_id = ${boardId}`;
 
   database.query(boardQuery).then((result) => {
+    database.close();
     return res.send({
       status: 200,
       board: result[0],
@@ -115,6 +118,7 @@ export const searchBoardFromKeyword = (req, res) => {
     .then((result) => {
       const hasNext = result.length == 10 ? true : false;
 
+      database.close();
       return res.send({
         status: 200,
         boards: result,
