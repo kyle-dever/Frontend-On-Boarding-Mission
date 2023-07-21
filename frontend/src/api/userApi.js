@@ -22,3 +22,13 @@ export const postSignIn = async (email, pw, userName, phoneNumber) => {
 
   return response.data;
 };
+
+export const submitForm = async (name, phoneNumber) => {
+  const user = {
+    name: name,
+    phoneNumber: phoneNumber,
+  };
+
+  const response = await axios.post('/api/user/submit', user);
+  return response;
+};
