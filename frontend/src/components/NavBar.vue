@@ -21,6 +21,9 @@
 
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto">
+          <b-nav-item @click="moveToFindId" v-if="!loginStore.isLogin"
+            >아이디 찾기</b-nav-item
+          >
           <b-nav-item @click="handleLogin" v-if="!loginStore.isLogin"
             >로그인</b-nav-item
           >
@@ -64,6 +67,9 @@ const modalStore = useModalStore();
 const tokenStore = useTokenStore();
 const loginStore = useLoginStore();
 
+function moveToFindId() {
+  router.push('/find/id');
+}
 function moveToHome() {
   router.push('/');
 }

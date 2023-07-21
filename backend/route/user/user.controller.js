@@ -139,3 +139,36 @@ export const reissue = (req, res, next) => {
       });
     });
 };
+
+export const submit = (req, res) => {
+  const database = new Database();
+  // const { user_id, phone_number, user_name } = req.body;
+  const phoneNumber = req.body.phoneNumber;
+  const userName = req.body.name;
+
+  console.log([userName, phoneNumber], req.body);
+  const submitQuery = `
+    SELECT email FROM user WHERE user_name = ? && phone_number = ?;
+  `;
+
+  console.log(submitQuery);
+
+  database
+    .query(submitQuery, [userName, phoneNumber])
+    .then((response) => {
+      console.log(response);
+      console.log('dddd');
+      return res.status(200).json({
+        code: 200,
+        message: 'token is created',
+        email: response,
+      });
+    })
+    .catch((error) => {
+      console.error('Error updating user:', error);
+      return res.status(500).json({
+        code: 500,
+        message: '데이터 베이스에 없습니다.',
+      });
+    });
+};

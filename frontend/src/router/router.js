@@ -26,6 +26,10 @@ const routes = [
     path: '/board/board',
     component: () => import('@/pages/Board/Board'),
   },
+  {
+    path: '/find/id',
+    component: () => import('@/pages/FindId'),
+  },
 ];
 
 const router = createRouter({
