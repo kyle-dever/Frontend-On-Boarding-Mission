@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { getBoardListAll } from '@/api/boardApi';
 import Card from '@/components/Card.vue';
 import { useRouter } from 'vue-router';
@@ -27,5 +27,7 @@ const clickedBoard = (id) => {
   });
 };
 
-getBoardListForHome();
+onBeforeMount(() => {
+  getBoardListForHome();
+});
 </script>
