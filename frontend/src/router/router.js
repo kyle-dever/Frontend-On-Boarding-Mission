@@ -40,6 +40,10 @@ const routes = [
     name: 'SearchResult',
     component: () => import('@/pages/SearchResult'),
   },
+  {
+    path: '/find/id',
+    component: () => import('@/pages/FindId'),
+  },
 ];
 
 const router = createRouter({
