@@ -64,3 +64,16 @@ export const updateBoardFromId = async (params) => {
   const response = await instance.patch('api/board/update/board', params);
   return response;
 };
+
+export const getSearchBoardFromKeyword = async (params, page) => {
+  const response = await axios.get('/api/getBoard/search', {
+    params: {
+      category: params.category,
+      keyword: params.keyword,
+      option: params.option,
+      page: page,
+    },
+  });
+
+  return response;
+};

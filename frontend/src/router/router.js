@@ -26,6 +26,15 @@ const routes = [
     path: '/board/board',
     component: () => import('@/pages/Board/Board'),
   },
+  {
+    path: '/search',
+    component: () => import('@/pages/Search'),
+  },
+  {
+    path: '/search/result',
+    name: 'SearchResult',
+    component: () => import('@/pages/SearchResult'),
+  },
 ];
 
 const router = createRouter({

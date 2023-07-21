@@ -1,8 +1,8 @@
 <template>
-  <form @submit.prevent="submitSearch">
+  <form @submit.prevent="handleSearch">
     <div>
       <label for="searchTerm">검색어:</label>
-      <input type="text" id="searchTerm" v-model="searchTerm" />
+      <input type="text" id="searchTerm" v-model="searchTerm" required />
     </div>
     <div>
       <label for="category">카테고리:</label>
@@ -32,19 +32,29 @@
         작성자
       </label>
     </div>
-    <b-button type="submit" @click="handleSearch">검색</b-button>
+    <b-button type="submit">검색</b-button>
   </form>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const searchTerm = ref('');
 const selectedCategory = ref('all');
 const searchOption = ref('all');
 
 const handleSearch = () => {
-  console.log(searchTerm.value, selectedCategory.value, searchOption.value);
+  router.push({
+    path: '/search/result',
+    query: {
+      keyword: searchTerm.value,
+      category: selectedCategory.value,
+      searchOption: searchOption.value,
+    },
+  });
 };
 </script>
 
