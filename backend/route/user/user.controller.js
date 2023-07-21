@@ -90,14 +90,17 @@ export const login = (req, res, next) => {
       `refresh_token = values(refresh_token), ` +
       `access_token = values(access_token)`;
     database.query(queryString, params).then(() => {
-      database.close();
-      return res.status(200).json({
-        code: 200,
-        message: 'token is created',
-        refreshToken: refreshToken,
-        accessToken: accessToken,
-        userInfo: signedUser,
-      });
+      return res
+        .send({
+          status: 200,
+          message: 'token is created',
+          refreshToken: refreshToken,
+          accessToken: accessToken,
+          userInfo: signedUser,
+        })
+        .then(() => {
+          database.close();
+        });
     });
   };
 };
@@ -134,11 +137,13 @@ export const reissue = (req, res, next) => {
       refreshToken,
     ])
     .then(() => {
-      database.close();
       return res.send({
         status: 200,
         message: 'New Token Issued',
         accessToken: accessToken,
       });
+    })
+    .then(() => {
+      database.close();
     });
 };

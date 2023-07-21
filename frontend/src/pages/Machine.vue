@@ -12,7 +12,7 @@
 <script setup>
 import BoardList from '@/components/BoardList.vue';
 import { useRouter, useRoute } from 'vue-router';
-import { ref, onMounted } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { getBoardListFromCategory } from '@/api/boardApi';
 
 const datas = ref([]);
@@ -47,7 +47,7 @@ const getBoardList = (category, page) => {
   });
 };
 
-onMounted(() => {
+onBeforeMount(() => {
   getBoardList('머신러닝', route.query.page);
 });
 </script>

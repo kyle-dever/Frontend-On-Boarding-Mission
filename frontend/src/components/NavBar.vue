@@ -94,7 +94,9 @@ function moveToAIBoard() {
   });
 }
 function moveToBoardWrite() {
-  router.push('/board/Write');
+  router.push({
+    path: '/board/Write',
+  });
 }
 function moveToSearch() {
   router.push('/search');

@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits, onMounted } from 'vue';
+import { ref, defineProps, defineEmits, onBeforeMount } from 'vue';
 const props = defineProps(['list', 'rows', 'currentPage']);
 const emits = defineEmits(['clickedBoard', 'clickedPage']);
 
@@ -44,7 +44,7 @@ const pageClick = (bvEvent, page) => {
   emits('clickedPage', page);
 };
 
-onMounted(() => {
-  currentPage.value = props.currentPage;
+onBeforeMount(() => {
+  currentPage.value = Number(props.currentPage);
 });
 </script>

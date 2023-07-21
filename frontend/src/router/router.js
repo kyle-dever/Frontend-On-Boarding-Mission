@@ -1,4 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router';
+import { useLoginStore } from '@/stores/isLogin';
+import { useModalStore } from '@/stores/modal';
 
 const routes = [
   {
@@ -21,6 +23,9 @@ const routes = [
     path: '/board/write',
     name: 'Write',
     component: () => import('@/pages/BoardWrite'),
+    beforeEnter: (to, from, next) => {
+      checkLogin(to, from, next);
+    },
   },
   {
     path: '/board/board',
@@ -41,5 +46,17 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+const checkLogin = (to, from, next) => {
+  const loginStore = useLoginStore();
+  const modalStore = useModalStore();
+  const isLogin = loginStore.isLogin;
+  if (!isLogin) {
+    alert('로그인이 필요한 페이지입니다.');
+    modalStore.openModal('modalLogin');
+  } else {
+    next();
+  }
+};
 
 export default router;
