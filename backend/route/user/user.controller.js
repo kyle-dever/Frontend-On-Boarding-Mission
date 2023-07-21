@@ -90,17 +90,13 @@ export const login = (req, res, next) => {
       `refresh_token = values(refresh_token), ` +
       `access_token = values(access_token)`;
     database.query(queryString, params).then(() => {
-      return res
-        .send({
-          status: 200,
-          message: 'token is created',
-          refreshToken: refreshToken,
-          accessToken: accessToken,
-          userInfo: signedUser,
-        })
-        .then(() => {
-          database.close();
-        });
+      return res.send({
+        status: 200,
+        message: 'token is created',
+        refreshToken: refreshToken,
+        accessToken: accessToken,
+        userInfo: signedUser,
+      });
     });
   };
 };
@@ -150,23 +146,17 @@ export const reissue = (req, res, next) => {
 
 export const submit = (req, res) => {
   const database = new Database();
-  // const { user_id, phone_number, user_name } = req.body;
   const phoneNumber = req.body.phoneNumber;
   const userName = req.body.name;
 
-  console.log([userName, phoneNumber], req.body);
   const submitQuery = `
     SELECT email FROM user WHERE user_name = ? && phone_number = ?;
   `;
 
-  console.log(submitQuery);
-
   database
     .query(submitQuery, [userName, phoneNumber])
     .then((response) => {
-      console.log(response);
-      console.log('dddd');
-      return res.status(200).json({
+      return res.send({
         code: 200,
         message: 'token is created',
         email: response,
