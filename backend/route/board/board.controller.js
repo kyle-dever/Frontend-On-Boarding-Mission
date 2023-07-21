@@ -29,6 +29,7 @@ export const postBoard = (req, res) => {
   const boardQuery = `INSERT INTO Board (user_id, writer, category, title, thumbnail, content, created_at) VALUES (?, ?, ?, ?, ?, ?, ?);`;
 
   database.query(boardQuery, boardInfo).then(() => {
+    database.close();
     return res.send({
       status: 200,
       message: '성공적으로 업로드 되었습니다.',
@@ -43,6 +44,7 @@ export const deleteBoard = (req, res) => {
   const boardQuery = `DELETE FROM Board WHERE board_id = ${boardId}`;
 
   database.query(boardQuery).then(() => {
+    database.close();
     return res.send({
       status: 200,
       message: '성공적으로 삭제 되었습니다.',
@@ -67,6 +69,7 @@ export const patchBoard = (req, res) => {
 
   const boardQuery = `UPDATE Board SET title = ?, category = ?, thumbnail = ?, content = ?, created_at = ? WHERE board_id = ${body.boardId}`;
   database.query(boardQuery, updatePayload).then(() => {
+    database.close();
     return res.send({
       status: 200,
       message: '성공적으로 수정 되었습니다.',

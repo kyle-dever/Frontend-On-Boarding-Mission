@@ -31,6 +31,7 @@ export const signin = (req, res) => {
     } else {
       const queryString = `INSERT INTO User (email, pw, user_name, phone_number, created_at) VALUES (?, ?, ?, ?, ?);`;
       database.query(queryString, userInfo).then(() => {
+        database.close();
         return res.status(201).json({
           code: 201,
           message: '회원가입 성공',
@@ -89,6 +90,7 @@ export const login = (req, res, next) => {
       `refresh_token = values(refresh_token), ` +
       `access_token = values(access_token)`;
     database.query(queryString, params).then(() => {
+      database.close();
       return res.status(200).json({
         code: 200,
         message: 'token is created',
@@ -132,6 +134,7 @@ export const reissue = (req, res, next) => {
       refreshToken,
     ])
     .then(() => {
+      database.close();
       return res.send({
         status: 200,
         message: 'New Token Issued',
