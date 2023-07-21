@@ -8,9 +8,10 @@
         img-top
         tag="article"
         style="max-width: 20rem; margin: 50px"
-        class="mb-2"
+        class="p-0"
         :footer="timestamp(item.created_at)"
         footer-tag="footer"
+        footer-class="bg-color-0"
         @click="emits('getBoard', item.board_id)"
       >
         <div class="card-img-container">
@@ -27,7 +28,16 @@
             class="center-crop"
           ></b-card-img>
         </div>
-        <b-card-text>{{ item.writer }}</b-card-text>
+        <b-card-text
+          class="text-right"
+          style="margin-top: 10px; margin-left: 0; font-weight: bold"
+          >writer: {{ item.writer }}</b-card-text
+        >
+        <b-card-text
+          style="margin-left: 0; font-size: 0.75rem"
+          class="two-line-text"
+          >{{ parseHtml(item.content) }}</b-card-text
+        >
       </b-card>
     </b-row>
   </div>
@@ -43,12 +53,17 @@ moment.tz.setDefault('Asia/Seoul');
 const props = defineProps(['datas']);
 const emits = defineEmits(['getBoard']);
 
+const parseHtml = (string) => {
+  const parsed = string.replace(/<[^>]*>?/g, '');
+  return parsed.replace(/&nbsp;/g, ' ');
+};
+
 const timestamp = (createdAt) => {
   return moment(createdAt).fromNow();
 };
 </script>
 
-<style scoped>
+<style>
 .card-img-container {
   display: flex;
   justify-content: center;
@@ -68,5 +83,17 @@ const timestamp = (createdAt) => {
   top: 0;
   left: 0;
   border: 1px solid #000;
+}
+
+.two-line-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* 텍스트를 2줄로 제한 */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis; /* ...으로 표시되도록 설정 */
+}
+
+.bg-color-0 {
+  background-color: #fff;
 }
 </style>

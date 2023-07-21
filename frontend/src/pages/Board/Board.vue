@@ -2,9 +2,11 @@
   <div class="container">
     <h1 id="title">게시글 조회</h1>
 
-    <div class="btn" v-if="post.writer == loginStore.userInfo.userName">
-      <input type="submit" value="수정" @click="modifyBoard" />
-      <input type="submit" value="삭제" @click="deleteBoard" />
+    <div class="btn-wrapper">
+      <div class="btn" v-if="post.writer == loginStore.userInfo.userName">
+        <input type="submit" value="수정" @click="modifyBoard" />
+        <input type="submit" value="삭제" @click="deleteBoard" />
+      </div>
     </div>
 
     <div v-if="loading">로딩 중...</div>
@@ -25,7 +27,7 @@
 
 <script setup>
 import { useRoute } from 'vue-router';
-import { onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { getBoardFromId, deleteBoardFromId } from '@/api/boardApi';
 import router from '@/router/router';
 import { useModalStore } from '@/stores/modal';
@@ -71,7 +73,7 @@ const handleDelete = () => {
   // id로 Delete후 이전 페이지로 이동
 };
 
-onMounted(() => {
+onBeforeMount(() => {
   getBoardFromId(boardId).then((result) => {
     post.value = result.data.board;
     loading.value = false;
@@ -101,6 +103,25 @@ h2 {
 p {
   margin-top: 0;
   margin-left: 30px;
+}
+
+.btn-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn {
+  margin-left: 10px; /* 간격을 조정할 수 있습니다. */
+}
+
+.btn input {
+  border: 1px solid #000;
+  border-radius: 5px;
+  margin: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .content-wrapper {
