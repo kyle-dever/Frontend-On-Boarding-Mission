@@ -67,24 +67,28 @@ export const searchBoardFromKeyword = (req, res) => {
   let boardQuery = `SELECT * FROM Board WHERE `;
   let countQuery = `SELECT COUNT(*) AS count FROM Board WHERE `;
 
-  if (req.query.category != undefined) {
+  if (req.query.category != 'all') {
     boardQuery += `category = '${req.query.category}' AND `;
     countQuery += `category = '${req.query.category}' AND `;
   }
 
-  if (req.query.title != undefined) {
-    boardQuery += `title LIKE '%${req.query.title}%' AND `;
-    countQuery += `title LIKE '%${req.query.title}%' AND `;
-  }
-
-  if (req.query.content != undefined) {
-    boardQuery += `content LIKE '%${req.query.content}%' AND `;
-    countQuery += `content LIKE '%${req.query.content}%' AND `;
-  }
-
-  if (req.query.writer != undefined) {
-    boardQuery += `writer LIKE '%${req.query.writer}%' AND `;
-    countQuery += `writer LIKE '%${req.query.writer}%' AND `;
+  switch (req.query.option) {
+    case 'all':
+      boardQuery += `(title LIKE '%${req.query.keyword}%' OR content LIKE '%${req.query.keyword}%' OR writer LIKE '%${req.query.keyword}%') `;
+      countQuery += `(title LIKE '%${req.query.keyword}%' OR content LIKE '%${req.query.keyword}%' OR writer LIKE '%${req.query.keyword}%') `;
+      break;
+    case 'title':
+      boardQuery += `title LIKE '%${req.query.keyword}%' `;
+      countQuery += `title LIKE '%${req.query.keyword}%' `;
+      break;
+    case 'content':
+      boardQuery += `content LIKE '%${req.query.keyword}%' `;
+      countQuery += `content LIKE '%${req.query.keyword}%' `;
+      break;
+    case 'writer':
+      boardQuery += `writer LIKE '%${req.query.keyword}%' `;
+      countQuery += `writer LIKE '%${req.query.keyword}%' `;
+      break;
   }
 
   boardQuery = boardQuery.replace(/ AND $/, '');
