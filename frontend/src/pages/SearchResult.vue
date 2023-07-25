@@ -5,13 +5,14 @@
     :rows="totalCount"
     @clickedBoard="clickedBoard"
     @clickedPage="clickedPage"
+    :currentPage="route.query.page"
   />
 </template>
 
 <script setup>
 import BoardList from '@/components/BoardList.vue';
 import { useRouter, useRoute } from 'vue-router';
-import { ref, onMounted } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 import { getSearchBoardFromKeyword } from '@/api/boardApi';
 
 const datas = ref([]);
@@ -34,6 +35,15 @@ const clickedBoard = (id) => {
 };
 
 const clickedPage = (page) => {
+  router.push({
+    query: {
+      keyword: keyword.value,
+      category: category.value,
+      searchOption: searchOption.value,
+      page: `${page}`,
+    },
+  });
+
   const params = {
     keyword: keyword.value,
     category: category.value,
@@ -51,11 +61,17 @@ const getBoardList = (params, page) => {
   });
 };
 
-onMounted(() => {
+onBeforeMount(() => {
   keyword.value = route.query.keyword;
   category.value = route.query.category;
   searchOption.value = route.query.searchOption;
 
-  clickedPage(1);
+  const params = {
+    keyword: keyword.value,
+    category: category.value,
+    option: searchOption.value,
+  };
+
+  getBoardList(params, route.query.page);
 });
 </script>

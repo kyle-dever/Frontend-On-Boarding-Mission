@@ -53,6 +53,7 @@ const handleSearch = () => {
       keyword: searchTerm.value,
       category: selectedCategory.value,
       searchOption: searchOption.value,
+      page: 1,
     },
   });
 };
