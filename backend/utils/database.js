@@ -3,10 +3,10 @@ import mysql from 'mysql';
 class Database {
   constructor() {
     this.connection = mysql.createConnection({
-      host: '127.0.0.1',
+      host: '10.24.200.245',
       port: '3306',
-      user: 'root',
-      password: 'dpqj1231',
+      user: 'jin',
+      password: 'test1234',
       database: 'blogDB',
     });
   }
